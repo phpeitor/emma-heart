@@ -730,7 +730,6 @@ body {
 
 }
 
-/*LOGO*/
 .logo {
   width: 120px;
   position: relative;
@@ -762,5 +761,4 @@ body {
 }
 .box:hover {
   transform: translate(14%, 35%);
-
 }

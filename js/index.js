@@ -1,34 +1,39 @@
-    const names = [
-      "María","Ana","Carmen","Rosa","Lucía","Juana","Elena","Patricia","Sandra","Verónica",
-      "Isabel","Teresa","Mercedes","Julia","Diana","Marta","Beatriz","Adriana","Mónica","Gloria",
-      "Paola","Fátima","Rebeca","Ruth","Eva","Margarita","Susana","Nadia","Clara","Nancy",
-      "Flor","Martha","María","Alejandra","Valeria","Andrea","Gabriela","Daniela","Liliana",
-      "Marcela","Lorena","Melisa","Vanessa","Pamela","Cynthia","Carolina","Claudia","Johana",
-      "Yessenia","Estefanía","Natalia","Belén","Jessica","Milagros","Brenda","Fiorella","Janet",
-      "Alicia","Silvia","Doris","Luisa","Evelyn","Magaly","Amparo","Soledad","Emma",
-    ];
+ const names = [
+    "María","Ana","Carmen","Rosa","Lucía","Juana","Elena","Patricia","Sandra","Verónica",
+    "Isabel","Teresa","Mercedes","Julia","Diana","Marta","Beatriz","Adriana","Mónica","Gloria",
+    "Paola","Fátima","Rebeca","Ruth","Eva","Margarita","Susana","Nadia","Clara","Nancy",
+    "Flor","Martha","Alejandra","Valeria","Andrea","Gabriela","Daniela","Liliana",
+    "Marcela","Lorena","Melisa","Vanessa","Pamela","Cynthia","Carolina","Claudia","Johana",
+    "Yessenia","Estefanía","Natalia","Belén","Jessica","Milagros","Brenda","Fiorella","Janet",
+    "Alicia","Silvia","Doris","Luisa","Evelyn","Magaly","Amparo","Soledad"
+  ];
 
-    function createLoveBlock(text) {
-      const love = document.createElement('div');
-      love.className = 'love';
+  const PATHS = {
+    heart: 'M250,90 C200,10 60,40 70,180 C80,300 210,360 250,410 C290,360 420,300 430,180 C440,40 300,10 250,90 Z',
+    star:  'M250,40 L302,182 L450,182 L330,264 L372,410 L250,330 L128,410 L170,264 L50,182 L198,182 Z'
+  };
 
-      const h = document.createElement('div');
-      h.className = 'love_horizontal';
+  const shape = Math.random() < 0.5 ? 'heart' : 'star';
+  const orbit = document.getElementById('orbit');
 
-      const v = document.createElement('div');
-      v.className = 'love_vertical';
+  function createLove(word, i){
+    const d = document.createElement('div');
+    d.className = 'love';
+    d.style.setProperty('--i', i);
+    d.innerHTML = `<div class="love_word">${word}</div>`;
+    return d;
+  }
 
-      const w = document.createElement('div');
-      w.className = 'love_word';
-      w.textContent = text;
+  const frag = document.createDocumentFragment();
+  names.forEach((n, i) => frag.appendChild(createLove(n, i)));
+  const emma = createLove('Emma', names.length);
+  emma.classList.add('love--highlight');
+  frag.appendChild(emma);
+  orbit.appendChild(frag);
 
-      v.appendChild(w);
-      h.appendChild(v);
-      love.appendChild(h);
-      return love;
-    }
-
-    const namesContainer = document.getElementById('names');
-    const frag = document.createDocumentFragment();
-    names.forEach(n => frag.appendChild(createLoveBlock(n)));
-    namesContainer.appendChild(frag);
+  if (CSS.supports('offset-path', 'path("M0,0 L1,1")')) {
+    const path = PATHS[shape];
+    orbit.querySelectorAll('.love').forEach(el => {
+      el.style.offsetPath = `path("${path}")`;
+    });
+  }

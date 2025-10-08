@@ -27,36 +27,20 @@ body{ background:#08011b; height:100vh; overflow:hidden; }
   pointer-events:none;            
 }
 
-#orbit .love{
-  position:absolute; top:0; left:0;
-  offset-distance:0%;
-  offset-rotate:0deg;               
-  animation:travel var(--speed) linear infinite;
-  animation-delay: calc(var(--i) * -0.3s);
-}
+#ui{ position:relative; z-index:0; }
 
-@keyframes travel{ to{ offset-distance:100%; } }
+#centered-image,
+#orbit{ position:absolute; z-index:1; }
 
-#orbit .love_word{
-  color:#fff; font-size:1.4rem; font-family:'Great Vibes', cursive;
-  letter-spacing:2px; text-shadow:0 0 10px #89e04b;
-  transform:rotateZ(-30deg);
-}
-
-#orbit .love--highlight .love_word{
-  color:rgb(216,71,71); font-size:2.4rem; text-shadow:0 0 10px rgb(183,3,3);
-}
-
-#centered-image:hover{
-  box-shadow:0 0 30px rgba(255,215,0,1), 0 0 50px rgba(255,215,0,0.8), 0 0 70px rgba(255,215,0,0.6);
-  filter:brightness(1.2) contrast(1.2);
-}
-
-.logo {
+.logo{
+  position: fixed;      /* o absolute si prefieres */
+  top: 40px;            /* ajusta a tu gusto */
+  left: 60px;
+  transform: rotate(-20deg);  /* (si quieres conservar el translate, ponlo aquí) */
+  z-index: 5;  
   width: 120px;
-  position: relative;
-  transform: rotate(-20deg) translate(50px, 100px);
 }
+
 .logo:before {
   content: "";
   display: block;
@@ -83,4 +67,29 @@ body{ background:#08011b; height:100vh; overflow:hidden; }
 }
 .box:hover {
   transform: translate(14%, 35%);
+}
+
+#orbit .love{
+  position:absolute; top:0; left:0;
+  offset-distance:0%;
+  offset-rotate:0deg;               
+  animation:travel var(--speed) linear infinite;
+  animation-delay: calc(var(--i) * -0.3s);
+}
+
+@keyframes travel{ to{ offset-distance:100%; } }
+
+#orbit .love_word{
+  color:#fff; font-size:1.4rem; font-family:'Great Vibes', cursive;
+  letter-spacing:2px; text-shadow:0 0 10px #89e04b;
+  transform:rotateZ(-30deg);
+}
+
+#orbit .love--highlight .love_word{
+  color:rgb(216,71,71); font-size:2.4rem; text-shadow:0 0 10px rgb(183,3,3);
+}
+
+#centered-image:hover{
+  box-shadow:0 0 30px rgba(255,215,0,1), 0 0 50px rgba(255,215,0,0.8), 0 0 70px rgba(255,215,0,0.6);
+  filter:brightness(1.2) contrast(1.2);
 }

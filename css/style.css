@@ -54,7 +54,7 @@ body{ background:#08011b; height:100vh; overflow:hidden; }
 .logo:before {
   content: "";
   display: block;
-  background: rgba(255, 255, 255, 0.4);
+  background: rgba(53, 51, 51, 0.4);
   position: absolute;
   top: 0;
   bottom: 0;

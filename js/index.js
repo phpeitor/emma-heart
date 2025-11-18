@@ -9,11 +9,21 @@
   ];
 
   const PATHS = {
+    // ❤️ Corazón
     heart: 'M250,90 C200,10 60,40 70,180 C80,300 210,360 250,410 C290,360 420,300 430,180 C440,40 300,10 250,90 Z',
-    star:  'M250,40 L302,182 L450,182 L330,264 L372,410 L250,330 L128,410 L170,264 L50,182 L198,182 Z'
+    // ⭐ Estrella
+    star: 'M250,40 L302,182 L450,182 L330,264 L372,410 L250,330 L128,410 L170,264 L50,182 L198,182 Z',
+    // ⚪ Círculo
+    circle: 'M250,100 A150,150 0 1,1 249.9,100 Z',
+    // 🔺 Triángulo 
+    triangle: 'M250,50 L450,400 L50,400 Z',
+    // 🔷 Diamante
+    diamond: 'M250,50 L450,250 L250,450 L50,250 Z'
   };
 
-  const shape = Math.random() < 0.5 ? 'heart' : 'star';
+  const pathKeys = Object.keys(PATHS);
+  const shape = pathKeys[Math.floor(Math.random() * pathKeys.length)];
+
   const orbit = document.getElementById('orbit');
 
   function createLove(word, i){
@@ -37,3 +47,5 @@
       el.style.offsetPath = `path("${path}")`;
     });
   }
+
+  console.log(`Forma seleccionada: ${shape}`);

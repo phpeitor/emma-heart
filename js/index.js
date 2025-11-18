@@ -48,4 +48,14 @@
     });
   }
 
+  const videos = [
+    "./resources/video1.mp4",
+    "./resources/video2.mp4"
+  ];
+
+  const randomVideo = videos[Math.floor(Math.random() * videos.length)];
+  const source = document.getElementById("video-source");
+  source.src = randomVideo;
+  document.getElementById("background-video").load();
+  
   console.log(`Forma seleccionada: ${shape}`);

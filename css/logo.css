@@ -7,12 +7,12 @@
  */
 .logo {
   position: absolute;
-  top: 12%;
-  left: 3%;
+  top: 24px;
+  left: 24px;
   z-index: 100;
   width: 110px;
   cursor: pointer;
-  transform: rotate(-10deg);
+  transform: rotate(-6deg);
   filter: drop-shadow(0 0 8px rgba(249, 143, 22, .65));
 }
 

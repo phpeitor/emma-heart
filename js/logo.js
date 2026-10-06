@@ -1,22 +1,31 @@
 (function () {
   'use strict';
 
+  // Personaliza estos valores para reutilizar el componente en otra landing.
+  const LOGO_CONFIG = {
+    sparkEmojis: ['✨', '🎁', '🎉', '🎂'],
+    reactionEmoji: '🥳',
+    reactionClass: 'brain'
+  };
+
   function initLogo(logo) {
     if (!logo || logo.dataset.logoReady === 'true') return;
 
     const image = logo.querySelector('.box img');
-    if (!image) return;
+    const box = logo.querySelector('.box');
+    if (!image || !box) return;
 
     logo.dataset.logoReady = 'true';
     logo.classList.add('haunt');
 
-    const emojis = ['✨', '🎁', '🎉', '🎂'];
+    box.dataset.logoReaction = LOGO_CONFIG.reactionEmoji;
     let sparkTimer = null;
 
     function makeSpark() {
       const rect = logo.getBoundingClientRect();
       const spark = document.createElement('span');
       spark.className = 'logo-spark';
+      const emojis = LOGO_CONFIG.sparkEmojis;
       spark.textContent = emojis[Math.floor(Math.random() * emojis.length)];
       spark.style.left = `${rect.left + rect.width * (Math.random() * 1.2 - .1)}px`;
       spark.style.top = `${rect.top + rect.height * (Math.random() * 1.2 - .1)}px`;
@@ -84,8 +93,8 @@
     }
 
     function triggerBrainEffect() {
-      logo.classList.toggle('brain');
-      if (logo.classList.contains('brain')) {
+      logo.classList.toggle(LOGO_CONFIG.reactionClass);
+      if (logo.classList.contains(LOGO_CONFIG.reactionClass)) {
         Array.from({ length: 10 }, (_, index) => {
           window.setTimeout(makeSpark, Math.random() * 350 + index * 10);
         });

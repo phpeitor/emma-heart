@@ -37,6 +37,7 @@ La experiencia visual incluye:
 ## Componente de logo reutilizable
 
 - Integrar incluyendo `css/logo.css` y `js/logo.js`.
+- Personalizar `LOGO_CONFIG` al inicio de `js/logo.js` para cambiar los emojis de partículas y la reacción del logo.
 - Usar la estructura mínima `.logo > .box > img`.
 - El componente debe funcionar aunque el proyecto no tenga órbita, video u overlay.
 - Mantener `role="button"`, `tabindex="0"` y un `aria-label` en el contenedor cuando el logo sea interactivo.

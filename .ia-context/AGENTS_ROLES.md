@@ -89,6 +89,7 @@ Trabaja en:
 Debe:
 
 - Mantener la integración basada en `.logo > .box > img`.
+- Cambiar los emojis del componente únicamente desde `LOGO_CONFIG`, al inicio de `js/logo.js`.
 - No depender de la órbita, del video ni de la imagen central.
 - Evitar listeners duplicados y exponer únicamente la inicialización necesaria.
 - Conservar soporte para clic, teclado, `Escape` y `prefers-reduced-motion`.

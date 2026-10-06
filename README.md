@@ -17,6 +17,3 @@ index.html
 ```
 [![Video](https://img.youtube.com/vi/USQhEoqAP6c/0.jpg)](https://www.youtube.com/watch?v=USQhEoqAP6c)  
 [Ver demo v2.0](https://www.youtube.com/watch?v=USQhEoqAP6c)
-
-[![Video](https://img.youtube.com/vi/Fj6EM4xCBGc/0.jpg)](https://www.youtube.com/watch?v=Fj6EM4xCBGc)  
-[Ver demo v1.0](https://www.youtube.com/watch?v=Fj6EM4xCBGc)

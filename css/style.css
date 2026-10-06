@@ -41,43 +41,6 @@ body{ background:#08011b; height:100vh; overflow:hidden; }
 #centered-image,
 #orbit{ position:absolute; z-index:1; }
 
-.logo{
-  position: fixed;    
-  top: 40px;       
-  left: 60px;
-  transform: rotate(-20deg); 
-  z-index: 5;  
-  width: 120px;
-}
-
-.logo:before {
-  content: "";
-  display: block;
-  background: rgba(53, 51, 51, 0.4);
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  border: 1px dashed #fff;
-  border-radius: 5px;
-}
-
-.box {
-  background: #fff;
-  border-radius: 5px;
-  padding: 5px 5px;
-  box-shadow: 1px 13px 79px 4px rgba(0, 0, 0, 0.25);
-  position: relative;
-  transition: transform 0.4s;
-}
-.box img {
-  width: 100%;
-}
-.box:hover {
-  transform: translate(14%, 35%);
-}
-
 #orbit .love{
   position:absolute; top:0; left:0;
   offset-distance:0%;

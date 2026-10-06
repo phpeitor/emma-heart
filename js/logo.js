@@ -10,7 +10,7 @@
     logo.dataset.logoReady = 'true';
     logo.classList.add('haunt');
 
-    const emojis = ['✨', '🕸️', '🦇', '🎃', '🩸', '🕯️'];
+    const emojis = ['✨', '🎁', '🎉', '🎂'];
     let sparkTimer = null;
 
     function makeSpark() {

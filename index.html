@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='75'>👧</text></svg>" />  
-  <title>Heart of Emma</title>
+  <title>Heart of Emma // Pixel Love</title>
   <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="./css/style.css">
   <link rel="stylesheet" href="./css/logo.css">
@@ -16,13 +16,60 @@
   </video>
   <div class="logo" role="button" tabindex="0" aria-label="Abrir logo en pantalla completa">
     <div class="box">
-      <img src="./resources/logo.png" alt="Halloween Criollo Logo" width="456" height="50">
+      <img src="./resources/logo.png" alt="Logotipo Phpeitor" width="456" height="50">
     </div>
   </div>
   
-  <div id="ui">
-    <img id="centered-image" src="./resources/emma1.png" alt="Emma" />
-    <div id="orbit"></div>
+  <main id="ui">
+    <header class="hero-copy">
+      <p class="eyebrow"><span class="status-dot"></span> EMMA HEART / ONLINE</p>
+      <h1>Un corazón lleno de <span>nombres</span></h1>
+      <p class="hero-subtitle">Elige tu forma y dale play a la energía.</p>
+    </header>
+
+    <section class="scene" aria-label="Animación de Emma y nombres">
+      <div class="scene-grid" aria-hidden="true"></div>
+      <div class="scene-ring scene-ring--outer" aria-hidden="true"></div>
+      <div class="scene-ring scene-ring--inner" aria-hidden="true"></div>
+      <img id="centered-image" src="./resources/emma1.png" alt="Emma sonriendo" />
+      <div id="orbit" aria-hidden="true"></div>
+      <div class="scene-caption"><span>01</span> PLAYING LOVE MODE</div>
+    </section>
+
+    <aside class="control-panel" aria-label="Controles de la animación">
+      <div class="panel-heading">
+        <div>
+          <p class="panel-kicker">CONTROL DE EXPERIENCIA</p>
+          <h2>Personaliza tu vibe</h2>
+        </div>
+        <span class="live-badge">LIVE</span>
+      </div>
+
+      <fieldset class="control-group">
+        <legend>01 / Elige una forma</legend>
+        <div class="option-grid option-grid--shapes" id="shape-controls">
+          <button class="option-button is-selected" type="button" data-shape="heart" aria-pressed="true"><span>♥</span><small>Corazón</small></button>
+          <button class="option-button" type="button" data-shape="star" aria-pressed="false"><span>✦</span><small>Estrella</small></button>
+          <button class="option-button" type="button" data-shape="circle" aria-pressed="false"><span>○</span><small>Círculo</small></button>
+          <button class="option-button" type="button" data-shape="triangle" aria-pressed="false"><span>△</span><small>Triángulo</small></button>
+          <button class="option-button" type="button" data-shape="diamond" aria-pressed="false"><span>◇</span><small>Diamante</small></button>
+        </div>
+      </fieldset>
+
+      <fieldset class="control-group">
+        <legend>02 / Selecciona un efecto</legend>
+        <div class="effect-list" id="effect-controls">
+          <button class="effect-button is-selected" type="button" data-effect="neon" aria-pressed="true"><span class="effect-icon">◈</span><span><b>Neon pulse</b><small>Brillo intenso</small></span></button>
+          <button class="effect-button" type="button" data-effect="arcade" aria-pressed="false"><span class="effect-icon">▦</span><span><b>Arcade scan</b><small>Modo retro pixel</small></span></button>
+          <button class="effect-button" type="button" data-effect="dream" aria-pressed="false"><span class="effect-icon">✧</span><span><b>Dreamy glow</b><small>Movimiento suave</small></span></button>
+        </div>
+      </fieldset>
+
+      <div class="panel-footer">
+        <p id="selection-status" role="status" aria-live="polite">FORMA: CORAZÓN <span>•</span> EFECTO: NEON PULSE</p>
+        <button id="pause-control" class="pause-button" type="button" aria-pressed="false"><span>Ⅱ</span> Pausar</button>
+      </div>
+    </aside>
   </div>
   <script src="./js/index.js"></script>
   <script src="./js/logo.js"></script>

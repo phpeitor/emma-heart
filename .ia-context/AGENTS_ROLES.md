@@ -8,6 +8,7 @@ Guía de trabajo para mantener coherente la landing animada **Heart of Emma**.
 - La experiencia principal muestra a Emma en el centro y nombres de mujeres orbitando una figura geométrica.
 - La página combina un video de fondo aleatorio, una imagen central con brillo, un logo animado y nombres generados desde JavaScript.
 - La interfaz usa una estética romántica y luminosa sobre un fondo oscuro.
+- Incluye un panel gamer pixel para cambiar forma, efecto visual y pausa.
 - Todo el contenido se sirve como archivos estáticos desde Apache o cualquier servidor HTTP local.
 - Los nombres mostrados están en español.
 
@@ -37,6 +38,7 @@ Debe:
 - Mantener la carga de `css/style.css`, `css/logo.css`, `js/index.js` y `js/logo.js`.
 - Conservar `lang="es"`, el viewport y textos alternativos descriptivos.
 - Mantener los identificadores que usa `index.js`: `background-video`, `video-source`, `centered-image` y `orbit`.
+- Mantener los controles `shape-controls`, `effect-controls`, `selection-status` y `pause-control`.
 - Mantener el logo como control accesible con `role="button"`, `tabindex` y `aria-label`.
 - Evitar introducir markup innecesario o dependencias de frameworks.
 

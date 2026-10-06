@@ -11,6 +11,7 @@ La experiencia visual incluye:
 - Nombres de mujeres en español que recorren una trayectoria geométrica animada.
 - Una forma seleccionada aleatoriamente entre corazón, estrella, círculo, triángulo y diamante.
 - Logo interactivo con animación, partículas y lightbox.
+- Panel de control accesible para cambiar figura, atmósfera visual y pausa.
 
 ## Archivos y responsabilidades
 
@@ -52,6 +53,7 @@ La experiencia visual incluye:
 - Mantener las animaciones basadas en `offset-path` y ofrecer una alternativa razonable si el navegador no lo soporta.
 - Mantener el lenguaje visual romántico y luminoso: fondo oscuro, resplandores rosados/rojos y tipografía manuscrita.
 - Mantener el diseño adaptable a viewport pequeños sin ocultar la imagen ni los nombres.
+- Mantener los estados `aria-pressed` y `role="status"` del panel al modificar sus controles.
 - Respetar `@media (prefers-reduced-motion: reduce)` al agregar o modificar animaciones.
 - Usar rutas relativas correctas (`../resources/...`) desde `css/style.css`.
 - No sustituir la identidad visual por estilos genéricos sin una razón explícita.

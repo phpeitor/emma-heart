@@ -344,9 +344,103 @@
     balloonLayer.appendChild(balloon);
   }
 
-  /* ---------------- Foto de Emma ---------------- */
+  /* ---------------- Foto de Emma: tarjeta de cumpleaños animada ---------------- */
   const photo = document.getElementById('centered-image');
-  if (photo) photo.addEventListener('click', () => burstFrom(photo, 60));
+  const CARD_FLOATERS = ['🎈', '🎉', '✨', '🎂', '🎁', '💖', '🎈', '⭐'];
+
+  function make(tag, className, text) {
+    const node = document.createElement(tag);
+    if (className) node.className = className;
+    if (text) node.textContent = text;
+    return node;
+  }
+
+  // Envuelve la foto ampliada en una tarjeta tipo polaroid que se mueve como un GIF.
+  function buildPhotoCard(image) {
+    image.className = 'photo-card__img';
+    const card = make('figure', 'photo-card');
+    const inner = make('div', 'photo-card__inner');
+    const frame = make('div', 'photo-card__frame');
+
+    const bunting = make('div', 'photo-card__bunting');
+    bunting.setAttribute('aria-hidden', 'true');
+    for (let i = 0; i < 9; i++) {
+      const flag = make('span');
+      flag.style.setProperty('--c', FIESTA_CONFIG.colors[i % FIESTA_CONFIG.colors.length]);
+      flag.style.setProperty('--d', `${i * -.18}s`);
+      bunting.appendChild(flag);
+    }
+
+    const floaters = make('div', 'photo-card__floaters');
+    floaters.setAttribute('aria-hidden', 'true');
+    CARD_FLOATERS.forEach((emoji, i) => {
+      const item = make('span', '', emoji);
+      item.style.setProperty('--x', `${6 + (i * 88) / (CARD_FLOATERS.length - 1)}%`);
+      item.style.setProperty('--t', `${4.2 + (i % 3) * .9}s`);
+      item.style.setProperty('--d', `${i * -.7}s`);
+      floaters.appendChild(item);
+    });
+
+    const sparkles = make('div', 'photo-card__sparkles');
+    sparkles.setAttribute('aria-hidden', 'true');
+    for (let i = 0; i < 4; i++) sparkles.appendChild(make('span', '', '✦'));
+
+    frame.append(image, make('span', 'photo-card__shine'), floaters, bunting, sparkles);
+
+    const caption = make('figcaption', 'photo-card__caption');
+    const titleText = `¡Feliz cumple, ${FIESTA_CONFIG.name}!`;
+    const title = make('p', 'photo-card__title');
+    title.setAttribute('aria-label', titleText);
+    Array.from(titleText).forEach((char, i) => {
+      const letter = make('span', '', char === ' ' ? '\u00a0' : char);
+      letter.setAttribute('aria-hidden', 'true');
+      letter.style.setProperty('--i', i);
+      title.appendChild(letter);
+    });
+    const badge = make('p', 'photo-card__badge');
+    badge.append(make('b', '', String(FIESTA_CONFIG.age)), document.createTextNode(' años de pura magia'));
+    caption.append(title, badge);
+
+    inner.append(frame, caption);
+    card.appendChild(inner);
+    return card;
+  }
+
+  function openPhotoCard() {
+    const lightbox = window.HalloweenLogo && window.HalloweenLogo.lightbox;
+    if (!lightbox) {
+      burstFrom(photo, 60);
+      return;
+    }
+    lightbox(photo, photo, {
+      modifier: 'logo-lightbox--photo',
+      closeLabel: 'Cerrar foto',
+      content: buildPhotoCard,
+      onOpen: overlay => {
+        // El confeti pasa por encima del lightbox mientras la tarjeta está abierta.
+        document.body.classList.add('photo-card-open');
+        const card = overlay.querySelector('.photo-card');
+        const half = (card ? card.offsetWidth : 420) / 2;
+        // Ráfagas desde los costados de la tarjeta para no tapar la cara de Emma.
+        window.setTimeout(() => {
+          burst(innerWidth / 2 - half, innerHeight * .3, 45);
+          burst(innerWidth / 2 + half, innerHeight * .3, 45);
+          rain(60);
+        }, 320);
+      },
+      onClose: () => document.body.classList.remove('photo-card-open')
+    });
+  }
+
+  if (photo) {
+    photo.addEventListener('click', openPhotoCard);
+    photo.addEventListener('keydown', event => {
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        openPhotoCard();
+      }
+    });
+  }
 
   /* ---------------- Inicio ---------------- */
   if (canvas) {

@@ -23,7 +23,10 @@ Apache, cualquier servidor HTTP local o una CDN de archivos estáticos.
   nombres (que se atenúan levemente).
 - **Foto circular perfecta:** recorte cuadrado con `object-fit: cover` centrado en la cara
   (la imagen original es vertical) e insignia «6» en la esquina. Al tocarla (o con `Enter`/`Espacio`)
-  se abre completa en un lightbox, además del confeti.
+  se abre una **tarjeta de cumpleaños animada** tipo polaroid: marco arcoíris que gira, zoom lento
+  sobre la foto, destello, banderines, emojis flotando, título en ola, insignia de edad y confeti.
+  Todo es CSS (sin GIF), toma nombre/edad/colores de `FIESTA_CONFIG` y se queda quieta con
+  movimiento reducido o pausa.
 - **Pastel interactivo como primera acción del panel:** seis velitas que se soplan con un toque
   o soplando al micrófono (solo en HTTPS). Al apagarlas todas cae confeti y suena «Cumpleaños feliz».
 - **Canción sintetizada** con Web Audio (sin archivos de audio) con botón Cantar/Detener;

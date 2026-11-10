@@ -140,7 +140,7 @@
     if (!effectLabels[effect]) return;
     selectedEffect = effect;
     document.body.dataset.effect = effect;
-    document.querySelectorAll('[data-effect]').forEach(button => {
+    document.querySelectorAll('#effect-controls [data-effect]').forEach(button => {
       const isSelected = button.dataset.effect === effect;
       button.classList.toggle('is-selected', isSelected);
       button.setAttribute('aria-pressed', String(isSelected));
@@ -165,23 +165,6 @@
     if (isPaused) backgroundVideo.pause();
     else backgroundVideo.play().catch(() => {});
   });
-
-  // Foto central: clic o Enter/Espacio la abre en grande con el lightbox del logo.
-  const photo = document.getElementById('centered-image');
-  function openPhoto() {
-    if (window.HalloweenLogo && window.HalloweenLogo.lightbox) {
-      window.HalloweenLogo.lightbox(photo, photo, { modifier: 'logo-lightbox--photo', closeLabel: 'Cerrar foto' });
-    }
-  }
-  if (photo) {
-    photo.addEventListener('click', openPhoto);
-    photo.addEventListener('keydown', event => {
-      if (event.key === 'Enter' || event.key === ' ') {
-        event.preventDefault();
-        openPhoto();
-      }
-    });
-  }
 
   loadPrefs();
   markShape(selectedShape);

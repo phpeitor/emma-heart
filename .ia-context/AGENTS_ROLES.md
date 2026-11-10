@@ -103,7 +103,8 @@ Debe:
 - Evitar listeners duplicados y exponer únicamente la inicialización necesaria.
 - Conservar soporte para clic, teclado, `Escape` y `prefers-reduced-motion`.
 - El lightbox es `role="dialog"`: mueve el foco al botón cerrar y lo devuelve a quien lo abrió.
-- `window.HalloweenLogo.lightbox(trigger, img, { modifier, closeLabel })` es la API reutilizable; la foto central la usa con `logo-lightbox--photo`.
+- `window.HalloweenLogo.lightbox(trigger, img, { modifier, closeLabel, content, onOpen, onClose })` es la API reutilizable.
+- La tarjeta animada de la foto (`.photo-card`) se construye en `js/fiesta.js` (`buildPhotoCard`) y se estiliza en `css/fiesta.css`; no hornear GIFs ni imágenes nuevas.
 - No generar partículas con la animación en pausa, la pestaña oculta o movimiento reducido.
 
 ### Agent Fiesta / Cumpleaños

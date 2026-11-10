@@ -1,0 +1,37 @@
+# Dependencias
+node_modules/
+
+# Secretos y credenciales (nunca al repo)
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+credentials*.json
+secrets*.json
+
+# Configuración local de asistentes y editores
+.claude/settings.local.json
+.claude/*.local.*
+.vscode/
+.idea/
+*.code-workspace
+*.swp
+*~
+
+# Archivos del sistema operativo
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs, temporales y capturas de pruebas
+*.log
+*.tmp
+tmp/
+.cache/
+screenshots/
+
+# Originales pesados o privados que no se publican (fotos/videos sin optimizar)
+resources/originales/

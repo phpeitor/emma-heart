@@ -12,6 +12,8 @@
    * Lightbox reutilizable: amplía `image` animándose desde `trigger`.
    * options.modifier agrega una clase al overlay (p. ej. 'logo-lightbox--photo').
    * options.closeLabel es el texto accesible del botón cerrar.
+   * options.content(img) puede devolver un elemento que envuelva la imagen (p. ej. una tarjeta).
+   * options.onOpen / options.onClose se llaman al abrir y al cerrar.
    */
   function openImageLightbox(trigger, image, options = {}) {
     if (!trigger || !image || document.querySelector('.logo-lightbox')) return;
@@ -35,9 +37,11 @@
     overlay.setAttribute('role', 'dialog');
     overlay.setAttribute('aria-modal', 'true');
     overlay.setAttribute('aria-label', image.alt || 'Imagen ampliada');
-    overlay.append(largeImage, close);
+    const content = typeof options.content === 'function' ? options.content(largeImage) : largeImage;
+    overlay.append(content || largeImage, close);
     document.body.appendChild(overlay);
     close.focus({ preventScroll: true });
+    if (typeof options.onOpen === 'function') options.onOpen(overlay);
 
     let closed = false;
     const closeLightbox = () => {
@@ -47,6 +51,7 @@
       overlay.classList.remove('logo-lightbox--open');
       overlay.classList.add('logo-lightbox--closing');
       window.setTimeout(() => overlay.remove(), 420);
+      if (typeof options.onClose === 'function') options.onClose(overlay);
       // Devuelve el foco a quien abrió el lightbox para seguir navegando con teclado.
       trigger.focus({ preventScroll: true });
     };

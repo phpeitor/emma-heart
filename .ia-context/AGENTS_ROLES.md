@@ -78,7 +78,9 @@ Trabaja en:
 Debe:
 
 - Mantener la creación de todos los nombres y de `EMMA` desde la lista y el runtime; EMMA se intercala `EMMA_REPEAT` veces a intervalos iguales.
-- Mantener la selección aleatoria entre las cinco formas y los dos videos disponibles.
+- Mantener la selección aleatoria entre los dos videos disponibles; la forma y el efecto elegidos se guardan en `localStorage` (`emma-heart:prefs`) dentro de `try/catch`.
+- Al cambiar de figura usar la transición `#orbit.is-switching` y omitirla con `prefers-reduced-motion`.
+- La pausa detiene también el video de fondo.
 - Aplicar `offset-path` únicamente cuando el navegador soporte CSS Motion Path.
 - Comprobar que los elementos del DOM existan antes de usarlos si se modifica la estructura.
 - Evitar acumular nodos o listeners si se vuelve a inicializar la órbita.
@@ -100,6 +102,8 @@ Debe:
 - No depender de la órbita, del video ni de la imagen central.
 - Evitar listeners duplicados y exponer únicamente la inicialización necesaria.
 - Conservar soporte para clic, teclado, `Escape` y `prefers-reduced-motion`.
+- El lightbox es `role="dialog"`: mueve el foco al botón cerrar y lo devuelve al logo.
+- No generar partículas con la animación en pausa, la pestaña oculta o movimiento reducido.
 
 ### Agent Fiesta / Cumpleaños
 

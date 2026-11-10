@@ -44,8 +44,27 @@
     dream: 'DREAMY GLOW'
   };
   const EMMA_REPEAT = 3;
+  const PREFS_KEY = 'emma-heart:prefs';
+  const SWITCH_MS = 190;
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
   let selectedShape = 'six';
   let selectedEffect = 'party';
+  let switchTimer = null;
+
+  // Recuerda la última forma y efecto elegidos (si el navegador lo permite).
+  function loadPrefs() {
+    try {
+      const prefs = JSON.parse(localStorage.getItem(PREFS_KEY)) || {};
+      if (PATHS[prefs.shape]) selectedShape = prefs.shape;
+      if (effectLabels[prefs.effect]) selectedEffect = prefs.effect;
+    } catch (error) { /* sin almacenamiento: se usan los valores por defecto */ }
+  }
+
+  function savePrefs() {
+    try {
+      localStorage.setItem(PREFS_KEY, JSON.stringify({ shape: selectedShape, effect: selectedEffect }));
+    } catch (error) { /* modo privado o almacenamiento bloqueado */ }
+  }
 
   function createLove(word, i){
     const d = document.createElement('div');
@@ -86,16 +105,32 @@
     status.innerHTML = `FORMA: ${shapeLabels[selectedShape]} <span>•</span> EFECTO: ${effectLabels[selectedEffect]}`;
   }
 
-  function selectShape(shape) {
-    if (!PATHS[shape]) return;
-    selectedShape = shape;
+  function markShape(shape) {
     document.querySelectorAll('[data-shape]').forEach(button => {
       const isSelected = button.dataset.shape === shape;
       button.classList.toggle('is-selected', isSelected);
       button.setAttribute('aria-pressed', String(isSelected));
     });
-    renderOrbit();
+  }
+
+  function selectShape(shape) {
+    if (!PATHS[shape] || shape === selectedShape) return;
+    selectedShape = shape;
+    markShape(shape);
     updateStatus();
+    savePrefs();
+
+    // Transición suave: la órbita se desvanece, cambia de figura y vuelve a entrar.
+    window.clearTimeout(switchTimer);
+    if (reduceMotion.matches) {
+      renderOrbit();
+      return;
+    }
+    orbit.classList.add('is-switching');
+    switchTimer = window.setTimeout(() => {
+      renderOrbit();
+      orbit.classList.remove('is-switching');
+    }, SWITCH_MS);
   }
 
   function selectEffect(effect) {
@@ -108,6 +143,7 @@
       button.setAttribute('aria-pressed', String(isSelected));
     });
     updateStatus();
+    savePrefs();
   }
 
   document.getElementById('shape-controls').addEventListener('click', event => {
@@ -122,8 +158,13 @@
     const isPaused = document.body.classList.toggle('is-paused');
     pauseControl.setAttribute('aria-pressed', String(isPaused));
     pauseControl.innerHTML = isPaused ? '<span>▶</span> Reanudar' : '<span>Ⅱ</span> Pausar';
+    // El video de fondo también se detiene con la pausa.
+    if (isPaused) backgroundVideo.pause();
+    else backgroundVideo.play().catch(() => {});
   });
 
+  loadPrefs();
+  markShape(selectedShape);
   renderOrbit();
   selectEffect(selectedEffect);
 

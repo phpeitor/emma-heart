@@ -1,5 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Press+Start+2P&family=Space+Grotesk:wght@400;500;600;700&display=swap');
-
 :root {
   --bg: #090616;
   --panel: rgba(13, 12, 31, .86);
@@ -172,7 +170,10 @@ h1 span { color: var(--pink); text-shadow: 4px 4px 0 rgba(255, 62, 157, .15); }
   pointer-events: none;
   left: 50%;
   top: 50%;
+  transition: opacity .19s ease-out, scale .19s ease-out;
 }
+/* Cambio de figura: la órbita se desvanece, se redibuja y vuelve (~380 ms en total). */
+#orbit.is-switching { opacity: 0; scale: .9; }
 #orbit .love {
   position: absolute;
   top: 0;
@@ -283,6 +284,14 @@ body[data-effect] #orbit div.love.love--highlight .love_word {
 .pause-button { padding: 9px 10px; color: var(--yellow); font-size: 11px; white-space: nowrap; }
 .pause-button span { margin-right: 4px; }
 
+body[data-effect="neon"] #background-video { filter: saturate(1.6) contrast(1.2) hue-rotate(-12deg); opacity: .4; }
+body[data-effect="neon"] .scene-grid { background: radial-gradient(circle, rgba(69, 232, 224, .2), rgba(178, 60, 255, .12) 42%, transparent 64%); }
+body[data-effect="neon"] .scene-ring { border-width: 2px; border-color: rgba(69, 232, 224, .7); box-shadow: 0 0 14px rgba(69, 232, 224, .55), inset 0 0 14px rgba(69, 232, 224, .35); animation: ring-spin 28s linear infinite, neon-pulse 2.4s ease-in-out infinite; }
+body[data-effect="neon"] .scene-ring--inner { border-color: rgba(255, 62, 157, .8); box-shadow: 0 0 14px rgba(255, 62, 157, .6), inset 0 0 14px rgba(255, 62, 157, .35); animation: ring-spin 18s linear infinite reverse, neon-pulse 2.4s ease-in-out -1.2s infinite; }
+body[data-effect="neon"] #orbit .love_word { color: #fff; opacity: 1; text-shadow: 0 0 4px #fff, 0 0 10px var(--cyan), 0 0 22px var(--cyan), 0 0 38px rgba(69, 232, 224, .7); }
+body[data-effect="neon"] #orbit .love:nth-child(even) .love_word { text-shadow: 0 0 4px #fff, 0 0 10px var(--pink), 0 0 22px var(--pink), 0 0 38px rgba(255, 62, 157, .7); }
+body[data-effect="neon"] #centered-image { box-shadow: 0 0 0 3px var(--cyan), 0 0 0 8px rgba(255, 62, 157, .35), 0 0 46px var(--pink), 0 0 110px rgba(69, 232, 224, .55); }
+@keyframes neon-pulse { 0%, 100% { opacity: .55; } 50% { opacity: 1; } }
 body[data-effect="arcade"] #background-video { filter: saturate(1.35) contrast(1.3); opacity: .32; }
 body[data-effect="arcade"]::after { background-size: 8px 8px; background-image: linear-gradient(rgba(255,255,255,.08) 1px, transparent 1px); mask-image: linear-gradient(black, black); opacity: .25; }
 body[data-effect="arcade"] #orbit .love_word { text-shadow: 2px 2px 0 #ff3e9d; }
@@ -317,7 +326,7 @@ button:focus-visible { outline: 2px solid var(--yellow); outline-offset: 3px; }
   .scene { min-height: 340px; }
   .option-button { min-height: 58px; }
   .option-button span { font-size: 20px; }
-  .option-button small { font-size: 7px; }
+  .option-button small { font-size: 9px; }
   .age-badge { margin-bottom: 8px; }
   .control-panel { padding: 16px; }
   .panel-footer { align-items: flex-end; flex-direction: column; }
@@ -354,5 +363,6 @@ button:focus-visible { outline: 2px solid var(--yellow); outline-offset: 3px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
+  #orbit { transition: none; }
   *, *::before, *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; }
 }

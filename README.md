@@ -30,8 +30,10 @@ Apache, cualquier servidor HTTP local o una CDN de archivos estáticos.
 - **Globos** que suben por la pantalla y se revientan con un toque; premio cada 6 globos.
 - **Confeti** en canvas al cargar, al reventar globos, al soplar velitas y al tocar la foto de Emma.
 - Selección dinámica de seis trayectorias: número 6, corazón, estrella, círculo, triángulo y diamante.
-- Cuatro atmósferas visuales: `Fiesta`, `Neon pulse`, `Arcade scan` y `Dreamy glow`.
-- Pausa y reanudación de todas las animaciones desde el panel de control.
+- Cuatro atmósferas visuales: `Fiesta`, `Neon pulse` (tubos neón cian/rosa con pulso), `Arcade scan` y `Dreamy glow`.
+- Transición suave al cambiar de figura: la órbita se desvanece y vuelve a entrar (~380 ms).
+- Recuerda la última forma y efecto elegidos (`localStorage`, clave `emma-heart:prefs`).
+- Pausa y reanudación de todas las animaciones, el video de fondo y las partículas del logo.
 - Selección aleatoria del video de fondo entre `video1.mp4` y `video2.mp4`.
 - Logo reutilizable con partículas, efecto de reacción y lightbox.
 - Diseño responsive para escritorio, tablet y móvil.
@@ -160,7 +162,9 @@ El componente requiere esta estructura mínima:
 - Los controles son botones nativos y exponen su estado con `aria-pressed`.
 - El resumen de selección utiliza `role="status"` y `aria-live="polite"`.
 - El logo puede abrirse con clic, `Enter` o `Espacio`.
+- El lightbox es un diálogo modal: el foco pasa al botón cerrar y vuelve al logo al cerrarse.
 - El lightbox se cierra con botón, `Escape` o clic fuera.
+- Los textos del panel en móvil no bajan de 8 px en tipografía pixel.
 - Las animaciones respetan `prefers-reduced-motion`.
 - Las imágenes incluyen texto alternativo descriptivo.
 
@@ -169,7 +173,9 @@ El componente requiere esta estructura mínima:
 Antes de publicar, comprueba:
 
 - Que `video1.mp4`, `video2.mp4`, las imágenes y el logo responden sin errores 404.
-- Que el panel permite cambiar las seis figuras y los cuatro efectos.
+- Que el panel permite cambiar las seis figuras (con transición suave) y los cuatro efectos.
+- Que «Neon pulse» cambia visiblemente el aspecto y que la elección se conserva al recargar.
+- Que pausar detiene también el video de fondo y las partículas del logo.
 - Que la foto de Emma se ve como círculo perfecto, sin deformarse, en escritorio y móvil.
 - Que EMMA aparece 3 veces y resalta sobre los demás nombres en las seis figuras y los cuatro efectos.
 - Que las seis velitas se apagan, cae confeti, suena la canción y aparece «Encender».

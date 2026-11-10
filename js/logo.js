@@ -20,8 +20,11 @@
 
     box.dataset.logoReaction = LOGO_CONFIG.reactionEmoji;
     let sparkTimer = null;
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
     function makeSpark() {
+      // Sin partículas con la animación en pausa, pestaña oculta o movimiento reducido.
+      if (reduceMotion.matches || document.hidden || document.body.classList.contains('is-paused')) return;
       const rect = logo.getBoundingClientRect();
       const spark = document.createElement('span');
       spark.className = 'logo-spark';
@@ -69,17 +72,28 @@
       close.className = 'logo-lightbox__close';
       close.setAttribute('aria-label', 'Cerrar logo');
       close.innerHTML = '&times;';
+      overlay.setAttribute('role', 'dialog');
+      overlay.setAttribute('aria-modal', 'true');
+      overlay.setAttribute('aria-label', image.alt || 'Logo');
       overlay.append(largeImage, close);
       document.body.appendChild(overlay);
+      close.focus({ preventScroll: true });
 
       const closeLightbox = () => {
         document.removeEventListener('keydown', onKey);
         overlay.classList.remove('logo-lightbox--open');
         overlay.classList.add('logo-lightbox--closing');
         window.setTimeout(() => overlay.remove(), 420);
+        // Devuelve el foco al logo para seguir navegando con teclado.
+        logo.focus({ preventScroll: true });
       };
       const onKey = event => {
         if (event.key === 'Escape') closeLightbox();
+        // El único control del diálogo es «cerrar»: Tab no debe salir del lightbox.
+        if (event.key === 'Tab') {
+          event.preventDefault();
+          close.focus();
+        }
       };
 
       close.addEventListener('click', closeLightbox);

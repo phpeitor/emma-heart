@@ -80,13 +80,16 @@
   function renderOrbit() {
     orbit.replaceChildren();
     const frag = document.createDocumentFragment();
-    // EMMA se repite a intervalos iguales para que siempre se vea en la figura.
-    const step = Math.ceil(names.length / EMMA_REPEAT);
+    // EMMA se reparte en posiciones equidistantes (0, 1/3 y 2/3 del recorrido con 3).
+    const total = names.length + EMMA_REPEAT;
+    const emmaSlots = new Set(Array.from({ length: EMMA_REPEAT }, (_, k) => Math.round(k * total / EMMA_REPEAT)));
     const words = [];
-    names.forEach((name, index) => {
-      if (index % step === 0) words.push(null);
-      words.push(name);
-    });
+    let nameIndex = 0;
+    for (let slot = 0; slot < total; slot++) {
+      words.push(emmaSlots.has(slot) ? null : names[nameIndex++]);
+    }
+    // El retraso de cada palabra se calcula con este total (ver #orbit .love en style.css).
+    orbit.style.setProperty('--total', total);
     words.forEach((word, index) => {
       const love = createLove(word || 'EMMA', index);
       if (!word) love.classList.add('love--highlight');
@@ -162,6 +165,23 @@
     if (isPaused) backgroundVideo.pause();
     else backgroundVideo.play().catch(() => {});
   });
+
+  // Foto central: clic o Enter/Espacio la abre en grande con el lightbox del logo.
+  const photo = document.getElementById('centered-image');
+  function openPhoto() {
+    if (window.HalloweenLogo && window.HalloweenLogo.lightbox) {
+      window.HalloweenLogo.lightbox(photo, photo, { modifier: 'logo-lightbox--photo', closeLabel: 'Cerrar foto' });
+    }
+  }
+  if (photo) {
+    photo.addEventListener('click', openPhoto);
+    photo.addEventListener('keydown', event => {
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        openPhoto();
+      }
+    });
+  }
 
   loadPrefs();
   markShape(selectedShape);

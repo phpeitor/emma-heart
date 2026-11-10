@@ -160,7 +160,9 @@ h1 span { color: var(--pink); text-shadow: 4px 4px 0 rgba(255, 62, 157, .15); }
   box-shadow: 0 0 0 8px rgba(255, 62, 157, .12), 0 0 36px rgba(255, 62, 157, .75), 0 0 90px rgba(69, 232, 224, .28);
   transition: filter .3s, transform .3s;
 }
-#centered-image:hover { filter: saturate(1.35) brightness(1.1); transform: scale(1.05); }
+#centered-image { cursor: zoom-in; }
+#centered-image:hover, #centered-image:focus-visible { filter: saturate(1.35) brightness(1.1); transform: scale(1.05); }
+#centered-image:focus-visible { outline: 3px solid var(--yellow); outline-offset: 6px; }
 
 #orbit {
   position: absolute;
@@ -181,7 +183,8 @@ h1 span { color: var(--pink); text-shadow: 4px 4px 0 rgba(255, 62, 157, .15); }
   offset-distance: 0%;
   offset-rotate: 0deg;
   animation: travel var(--speed) linear infinite;
-  animation-delay: calc(var(--i) * -.3s);
+  /* Reparto exacto: cada palabra separada por duración ÷ total de palabras. */
+  animation-delay: calc(var(--speed) * var(--i) / var(--total, 67) * -1);
 }
 #orbit .love_word {
   color: #e5e4f4;

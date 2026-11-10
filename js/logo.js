@@ -8,6 +8,67 @@
     reactionClass: 'brain'
   };
 
+  /**
+   * Lightbox reutilizable: amplía `image` animándose desde `trigger`.
+   * options.modifier agrega una clase al overlay (p. ej. 'logo-lightbox--photo').
+   * options.closeLabel es el texto accesible del botón cerrar.
+   */
+  function openImageLightbox(trigger, image, options = {}) {
+    if (!trigger || !image || document.querySelector('.logo-lightbox')) return;
+
+    const rect = trigger.getBoundingClientRect();
+    const overlay = document.createElement('div');
+    overlay.className = 'logo-lightbox';
+    if (options.modifier) overlay.classList.add(options.modifier);
+    overlay.style.setProperty('--lbx', `${rect.left + rect.width / 2 - innerWidth / 2}px`);
+    overlay.style.setProperty('--lby', `${rect.top + rect.height / 2 - innerHeight / 2}px`);
+
+    const largeImage = document.createElement('img');
+    largeImage.src = image.currentSrc || image.src;
+    largeImage.alt = image.alt;
+    largeImage.className = 'logo-lightbox__img';
+    const close = document.createElement('button');
+    close.type = 'button';
+    close.className = 'logo-lightbox__close';
+    close.setAttribute('aria-label', options.closeLabel || 'Cerrar imagen');
+    close.innerHTML = '&times;';
+    overlay.setAttribute('role', 'dialog');
+    overlay.setAttribute('aria-modal', 'true');
+    overlay.setAttribute('aria-label', image.alt || 'Imagen ampliada');
+    overlay.append(largeImage, close);
+    document.body.appendChild(overlay);
+    close.focus({ preventScroll: true });
+
+    let closed = false;
+    const closeLightbox = () => {
+      if (closed) return;
+      closed = true;
+      document.removeEventListener('keydown', onKey);
+      overlay.classList.remove('logo-lightbox--open');
+      overlay.classList.add('logo-lightbox--closing');
+      window.setTimeout(() => overlay.remove(), 420);
+      // Devuelve el foco a quien abrió el lightbox para seguir navegando con teclado.
+      trigger.focus({ preventScroll: true });
+    };
+    const onKey = event => {
+      if (event.key === 'Escape') closeLightbox();
+      // El único control del diálogo es «cerrar»: Tab no debe salir del lightbox.
+      if (event.key === 'Tab') {
+        event.preventDefault();
+        close.focus();
+      }
+    };
+
+    close.addEventListener('click', closeLightbox);
+    overlay.addEventListener('click', event => {
+      if (event.target === overlay) closeLightbox();
+    });
+    document.addEventListener('keydown', onKey);
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      overlay.classList.add('logo-lightbox--open');
+    }));
+  }
+
   function initLogo(logo) {
     if (!logo || logo.dataset.logoReady === 'true') return;
 
@@ -54,58 +115,6 @@
       sparkTimer = null;
     }
 
-    function openLightbox() {
-      if (document.querySelector('.logo-lightbox')) return;
-
-      const rect = logo.getBoundingClientRect();
-      const overlay = document.createElement('div');
-      overlay.className = 'logo-lightbox';
-      overlay.style.setProperty('--lbx', `${rect.left + rect.width / 2 - innerWidth / 2}px`);
-      overlay.style.setProperty('--lby', `${rect.top + rect.height / 2 - innerHeight / 2}px`);
-
-      const largeImage = document.createElement('img');
-      largeImage.src = image.currentSrc || image.src;
-      largeImage.alt = image.alt;
-      largeImage.className = 'logo-lightbox__img';
-      const close = document.createElement('button');
-      close.type = 'button';
-      close.className = 'logo-lightbox__close';
-      close.setAttribute('aria-label', 'Cerrar logo');
-      close.innerHTML = '&times;';
-      overlay.setAttribute('role', 'dialog');
-      overlay.setAttribute('aria-modal', 'true');
-      overlay.setAttribute('aria-label', image.alt || 'Logo');
-      overlay.append(largeImage, close);
-      document.body.appendChild(overlay);
-      close.focus({ preventScroll: true });
-
-      const closeLightbox = () => {
-        document.removeEventListener('keydown', onKey);
-        overlay.classList.remove('logo-lightbox--open');
-        overlay.classList.add('logo-lightbox--closing');
-        window.setTimeout(() => overlay.remove(), 420);
-        // Devuelve el foco al logo para seguir navegando con teclado.
-        logo.focus({ preventScroll: true });
-      };
-      const onKey = event => {
-        if (event.key === 'Escape') closeLightbox();
-        // El único control del diálogo es «cerrar»: Tab no debe salir del lightbox.
-        if (event.key === 'Tab') {
-          event.preventDefault();
-          close.focus();
-        }
-      };
-
-      close.addEventListener('click', closeLightbox);
-      overlay.addEventListener('click', event => {
-        if (event.target === overlay) closeLightbox();
-      });
-      document.addEventListener('keydown', onKey);
-      requestAnimationFrame(() => requestAnimationFrame(() => {
-        overlay.classList.add('logo-lightbox--open');
-      }));
-    }
-
     function triggerBrainEffect() {
       logo.classList.toggle(LOGO_CONFIG.reactionClass);
       if (logo.classList.contains(LOGO_CONFIG.reactionClass)) {
@@ -118,6 +127,7 @@
     startSparks();
     logo.addEventListener('mouseenter', stopSparks);
     logo.addEventListener('mouseleave', startSparks);
+    const openLightbox = () => openImageLightbox(logo, image, { closeLabel: 'Cerrar logo' });
     logo.addEventListener('click', () => {
       openLightbox();
       triggerBrainEffect();
@@ -140,5 +150,5 @@
     init();
   }
 
-  window.HalloweenLogo = { init: initLogo };
+  window.HalloweenLogo = { init: initLogo, lightbox: openImageLightbox };
 })();

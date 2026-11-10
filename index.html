@@ -8,12 +8,15 @@
   <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="./css/style.css">
   <link rel="stylesheet" href="./css/logo.css">
+  <link rel="stylesheet" href="./css/fiesta.css">
 </head>
 <body>
   <video autoplay loop muted playsinline id="background-video">
     <source id="video-source" src="" type="video/mp4">
     Tu navegador no soporta la reproducción de video.
   </video>
+  <canvas id="confetti" aria-hidden="true"></canvas>
+  <div id="balloon-layer" aria-hidden="true"></div>
   <div class="logo" role="button" tabindex="0" aria-label="Abrir logo en pantalla completa">
     <div class="box">
       <img src="./resources/logo.png" alt="Logotipo Phpeitor" width="456" height="50">
@@ -22,18 +25,20 @@
   
   <main id="ui">
     <header class="hero-copy">
-      <p class="eyebrow"><span class="status-dot"></span> EMMA HEART / ONLINE</p>
-      <h1>Corazón de <span>Emma</span></h1>
-      <p class="hero-subtitle">Elige tu forma y dale play a la energía.</p>
+      <p class="eyebrow"><span class="status-dot"></span> EMMA HEART / CUMPLE 06</p>
+      <h1>¡Feliz cumple, <span>Emma</span>!</h1>
+      <p class="age-badge"><b>6</b> años de pura magia</p>
+      <p class="hero-subtitle">Sopla sus velitas, revienta globos y elige la forma de su fiesta.</p>
     </header>
 
     <section class="scene" aria-label="Animación de Emma y nombres">
       <div class="scene-grid" aria-hidden="true"></div>
       <div class="scene-ring scene-ring--outer" aria-hidden="true"></div>
       <div class="scene-ring scene-ring--inner" aria-hidden="true"></div>
-      <img id="centered-image" src="./resources/emma.webp" alt="Emma sonriendo" />
+      <img id="centered-image" src="./resources/emma.webp" alt="Emma sonriendo en su cumpleaños número 6" />
       <div id="orbit" aria-hidden="true"></div>
-      <div class="scene-caption"><span>01</span> PLAYING LOVE MODE</div>
+      <div class="scene-caption"><span>06</span> PLAYING BIRTHDAY MODE</div>
+      <p class="balloon-counter" id="balloon-counter" role="status" aria-live="polite">🎈 Toca los globos para reventarlos</p>
     </section>
 
     <aside class="control-panel" aria-label="Controles de la animación">
@@ -48,7 +53,8 @@
       <fieldset class="control-group">
         <legend>01 / Elige una forma</legend>
         <div class="option-grid option-grid--shapes" id="shape-controls">
-          <button class="option-button is-selected" type="button" data-shape="heart" aria-pressed="true"><span>♥</span><small>Corazón</small></button>
+          <button class="option-button is-selected" type="button" data-shape="six" aria-pressed="true"><span>6</span><small>Seis</small></button>
+          <button class="option-button" type="button" data-shape="heart" aria-pressed="false"><span>♥</span><small>Corazón</small></button>
           <button class="option-button" type="button" data-shape="star" aria-pressed="false"><span>✦</span><small>Estrella</small></button>
           <button class="option-button" type="button" data-shape="circle" aria-pressed="false"><span>○</span><small>Círculo</small></button>
           <button class="option-button" type="button" data-shape="triangle" aria-pressed="false"><span>△</span><small>Triángulo</small></button>
@@ -59,19 +65,46 @@
       <fieldset class="control-group">
         <legend>02 / Selecciona un efecto</legend>
         <div class="effect-list" id="effect-controls">
-          <button class="effect-button is-selected" type="button" data-effect="neon" aria-pressed="true"><span class="effect-icon">◈</span><span><b>Neon pulse</b><small>Brillo intenso</small></span></button>
+          <button class="effect-button is-selected" type="button" data-effect="party" aria-pressed="true"><span class="effect-icon">✺</span><span><b>Fiesta</b><small>Colores de cumpleaños</small></span></button>
+          <button class="effect-button" type="button" data-effect="neon" aria-pressed="false"><span class="effect-icon">◈</span><span><b>Neon pulse</b><small>Brillo intenso</small></span></button>
           <button class="effect-button" type="button" data-effect="arcade" aria-pressed="false"><span class="effect-icon">▦</span><span><b>Arcade scan</b><small>Modo retro pixel</small></span></button>
           <button class="effect-button" type="button" data-effect="dream" aria-pressed="false"><span class="effect-icon">✧</span><span><b>Dreamy glow</b><small>Movimiento suave</small></span></button>
         </div>
       </fieldset>
 
+      <fieldset class="control-group">
+        <legend>03 / Sopla las velitas</legend>
+        <div class="cake-card">
+          <div class="cake">
+            <div class="candles" id="candles">
+              <button class="candle" type="button" data-candle aria-pressed="false" aria-label="Soplar velita 1"><span class="flame"></span></button>
+              <button class="candle" type="button" data-candle aria-pressed="false" aria-label="Soplar velita 2"><span class="flame"></span></button>
+              <button class="candle" type="button" data-candle aria-pressed="false" aria-label="Soplar velita 3"><span class="flame"></span></button>
+              <button class="candle" type="button" data-candle aria-pressed="false" aria-label="Soplar velita 4"><span class="flame"></span></button>
+              <button class="candle" type="button" data-candle aria-pressed="false" aria-label="Soplar velita 5"><span class="flame"></span></button>
+              <button class="candle" type="button" data-candle aria-pressed="false" aria-label="Soplar velita 6"><span class="flame"></span></button>
+            </div>
+            <div class="cake-layer cake-layer--top" aria-hidden="true"></div>
+            <div class="cake-layer cake-layer--bottom" aria-hidden="true"><span>EMMA · 6</span></div>
+            <div class="cake-plate" aria-hidden="true"></div>
+          </div>
+          <p id="cake-status" class="cake-status" role="status" aria-live="polite">Toca cada velita para soplarla 🎂</p>
+          <div class="cake-actions">
+            <button id="mic-control" class="fiesta-button" type="button" aria-pressed="false" hidden>🎤 Soplar de verdad</button>
+            <button id="song-control" class="fiesta-button" type="button" aria-pressed="false">♪ Cantar</button>
+            <button id="relight-control" class="fiesta-button" type="button" hidden>↺ Encender</button>
+          </div>
+        </div>
+      </fieldset>
+
       <div class="panel-footer">
-        <p id="selection-status" role="status" aria-live="polite">FORMA: CORAZÓN <span>•</span> EFECTO: NEON PULSE</p>
+        <p id="selection-status" role="status" aria-live="polite">FORMA: NÚMERO 6 <span>•</span> EFECTO: FIESTA</p>
         <button id="pause-control" class="pause-button" type="button" aria-pressed="false"><span>Ⅱ</span> Pausar</button>
       </div>
     </aside>
-  </div>
+  </main>
   <script src="./js/index.js"></script>
   <script src="./js/logo.js"></script>
+  <script src="./js/fiesta.js"></script>
 </body>
 </html>

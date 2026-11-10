@@ -9,7 +9,8 @@ La experiencia visual incluye:
 - Video local de fondo, elegido aleatoriamente entre `video1.mp4` y `video2.mp4`.
 - Fotografía central de Emma con brillo y transición al pasar el cursor.
 - Nombres de mujeres en español que recorren una trayectoria geométrica animada.
-- Una forma seleccionada aleatoriamente entre corazón, estrella, círculo, triángulo y diamante.
+- Una forma seleccionable entre número 6 (por defecto), corazón, estrella, círculo, triángulo y diamante.
+- Modo cumpleaños: pastel con 6 velitas (toque o micrófono), globos para reventar, confeti y canción con Web Audio.
 - Logo interactivo con animación, partículas y lightbox.
 - Panel de control accesible para cambiar figura, atmósfera visual y pausa.
 
@@ -20,9 +21,10 @@ La experiencia visual incluye:
 - `css/logo.css`: estilos autocontenidos del componente interactivo del logo.
 - `js/index.js`: lista de nombres, trayectorias, creación de elementos animados y selección del video.
 - `js/logo.js`: inicialización del logo, partículas y lightbox.
+- `css/fiesta.css` y `js/fiesta.js`: componente autocontenido de cumpleaños (no mezclar su lógica en `index.js`).
 - `resources/video1.mp4`, `resources/video2.mp4`: videos de fondo.
 - `resources/logo.png`: identidad visual del sitio.
-- `resources/emma1.png`, `resources/emma2.png`, `resources/emma3.png`: imágenes disponibles de Emma.
+- `resources/emma.webp`: fotografía central de Emma.
 - `README.md`: instrucciones básicas de ejecución.
 
 ## Reglas HTML
@@ -83,3 +85,4 @@ La experiencia visual incluye:
 - Confirmar que el logo abre y cierra el lightbox con clic, teclado, `Escape` y clic fuera.
 - Revisar consola y red para detectar errores JavaScript o recursos faltantes.
 - Probar con `prefers-reduced-motion` habilitado.
+- Soplar las seis velitas (toque y, en HTTPS, micrófono) y reventar globos sin que tapen el panel.

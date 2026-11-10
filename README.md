@@ -18,11 +18,12 @@ Apache, cualquier servidor HTTP local o una CDN de archivos estáticos.
 ## Funcionalidades
 
 - **Modo cumpleaños (6 años):** hero de celebración, figura «Número 6» y efecto `Fiesta` por defecto.
-- **EMMA protagonista:** aparece 3 veces repartida en la figura, en mayúsculas, dentro de una
+- **EMMA protagonista:** aparece 3 veces en posiciones equidistantes de la figura (0, 1/3 y 2/3 del recorrido), en mayúsculas, dentro de una
   pastilla rosa con estrellas, brillo y latido, siempre derecha y por encima de los demás
   nombres (que se atenúan levemente).
 - **Foto circular perfecta:** recorte cuadrado con `object-fit: cover` centrado en la cara
-  (la imagen original es vertical) e insignia «6» en la esquina.
+  (la imagen original es vertical) e insignia «6» en la esquina. Al tocarla (o con `Enter`/`Espacio`)
+  se abre completa en un lightbox, además del confeti.
 - **Pastel interactivo como primera acción del panel:** seis velitas que se soplan con un toque
   o soplando al micrófono (solo en HTTPS). Al apagarlas todas cae confeti y suena «Cumpleaños feliz».
 - **Canción sintetizada** con Web Audio (sin archivos de audio) con botón Cantar/Detener;
@@ -105,8 +106,9 @@ emma-heart/
 
 Edita la lista `names` y el objeto `PATHS` en [js/index.js](./js/index.js). Los nombres
 se insertan con `textContent`, por lo que no deben incluir HTML. `EMMA` no va en la lista:
-se intercala automáticamente a intervalos iguales; cuántas veces aparece se controla con
-`EMMA_REPEAT` (3 por defecto). Su estilo está en `.love--highlight` de
+se intercala automáticamente en posiciones equidistantes; cuántas veces aparece se controla con
+`EMMA_REPEAT` (3 por defecto). El retraso de cada palabra es `--speed × índice ÷ --total`, así que
+el reparto sigue siendo exacto aunque agregues o quites nombres. Su estilo está en `.love--highlight` de
 [css/style.css](./css/style.css).
 
 ### Foto central
@@ -161,7 +163,7 @@ El componente requiere esta estructura mínima:
 
 - Los controles son botones nativos y exponen su estado con `aria-pressed`.
 - El resumen de selección utiliza `role="status"` y `aria-live="polite"`.
-- El logo puede abrirse con clic, `Enter` o `Espacio`.
+- El logo y la foto de Emma pueden abrirse con clic, `Enter` o `Espacio`.
 - El lightbox es un diálogo modal: el foco pasa al botón cerrar y vuelve al logo al cerrarse.
 - El lightbox se cierra con botón, `Escape` o clic fuera.
 - Los textos del panel en móvil no bajan de 8 px en tipografía pixel.

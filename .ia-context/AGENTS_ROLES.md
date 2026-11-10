@@ -77,7 +77,7 @@ Trabaja en:
 
 Debe:
 
-- Mantener la creación de todos los nombres y de `EMMA` desde la lista y el runtime; EMMA se intercala `EMMA_REPEAT` veces a intervalos iguales.
+- Mantener la creación de todos los nombres y de `EMMA` desde la lista y el runtime; EMMA se intercala `EMMA_REPEAT` veces en posiciones equidistantes y el retraso usa `--total` (no un valor fijo por palabra).
 - Mantener la selección aleatoria entre los dos videos disponibles; la forma y el efecto elegidos se guardan en `localStorage` (`emma-heart:prefs`) dentro de `try/catch`.
 - Al cambiar de figura usar la transición `#orbit.is-switching` y omitirla con `prefers-reduced-motion`.
 - La pausa detiene también el video de fondo.
@@ -102,7 +102,8 @@ Debe:
 - No depender de la órbita, del video ni de la imagen central.
 - Evitar listeners duplicados y exponer únicamente la inicialización necesaria.
 - Conservar soporte para clic, teclado, `Escape` y `prefers-reduced-motion`.
-- El lightbox es `role="dialog"`: mueve el foco al botón cerrar y lo devuelve al logo.
+- El lightbox es `role="dialog"`: mueve el foco al botón cerrar y lo devuelve a quien lo abrió.
+- `window.HalloweenLogo.lightbox(trigger, img, { modifier, closeLabel })` es la API reutilizable; la foto central la usa con `logo-lightbox--photo`.
 - No generar partículas con la animación en pausa, la pestaña oculta o movimiento reducido.
 
 ### Agent Fiesta / Cumpleaños

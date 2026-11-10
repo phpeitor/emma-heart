@@ -173,6 +173,13 @@
     });
   }
 
+  const pauseControl = document.getElementById('pause-control');
+  if (pauseControl) {
+    pauseControl.addEventListener('click', () => {
+      if (document.body.classList.contains('is-paused')) stopSong();
+    });
+  }
+
   /* ---------------- Pastel y velitas ---------------- */
   const candles = Array.from(document.querySelectorAll('[data-candle]'));
   const cakeStatus = document.getElementById('cake-status');

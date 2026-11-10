@@ -7,7 +7,8 @@ Este repositorio contiene **Heart of Emma**, una landing estática de una sola p
 La experiencia visual incluye:
 
 - Video local de fondo, elegido aleatoriamente entre `video1.mp4` y `video2.mp4`.
-- Fotografía central de Emma con brillo y transición al pasar el cursor.
+- Fotografía central de Emma circular (recorte cuadrado con `object-fit: cover`), con brillo, insignia «6» y transición al pasar el cursor.
+- EMMA aparece 3 veces en la órbita y siempre resalta sobre los demás nombres.
 - Nombres de mujeres en español que recorren una trayectoria geométrica animada.
 - Una forma seleccionable entre número 6 (por defecto), corazón, estrella, círculo, triángulo y diamante.
 - Modo cumpleaños: pastel con 6 velitas (toque o micrófono), globos para reventar, confeti y canción con Web Audio.

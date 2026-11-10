@@ -9,6 +9,8 @@
   ];
 
   const PATHS = {
+    // 6️⃣ Número 6 (la edad de Emma)
+    six: 'M355,62 C265,10 100,60 95,285 A155,155 0 0,0 405,285 A155,155 0 0,0 95,285 C112,85 255,40 345,82 Z',
     // ❤️ Corazón
     heart: 'M250,90 C200,10 60,40 70,180 C80,300 210,360 250,410 C290,360 420,300 430,180 C440,40 300,10 250,90 Z',
     // ⭐ Estrella
@@ -28,6 +30,7 @@
   const status = document.getElementById('selection-status');
   const pauseControl = document.getElementById('pause-control');
   const shapeLabels = {
+    six: 'NÚMERO 6',
     heart: 'CORAZÓN',
     star: 'ESTRELLA',
     circle: 'CÍRCULO',
@@ -35,12 +38,13 @@
     diamond: 'DIAMANTE'
   };
   const effectLabels = {
+    party: 'FIESTA',
     neon: 'NEON PULSE',
     arcade: 'ARCADE SCAN',
     dream: 'DREAMY GLOW'
   };
-  let selectedShape = 'heart';
-  let selectedEffect = 'neon';
+  let selectedShape = 'six';
+  let selectedEffect = 'party';
 
   function createLove(word, i){
     const d = document.createElement('div');

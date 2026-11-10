@@ -11,14 +11,17 @@ Guía de trabajo para mantener coherente la landing animada **Heart of Emma**.
 - Incluye un panel gamer pixel para cambiar forma, efecto visual y pausa.
 - Todo el contenido se sirve como archivos estáticos desde Apache o cualquier servidor HTTP local.
 - Los nombres mostrados están en español.
+- Es la landing del cumpleaños número 6 de Emma: incluye pastel con velitas, globos, confeti y canción (`fiesta.css` / `fiesta.js`).
 
 ## Estructura real
 
 - `index.html`: documento base, video, logotipo, imagen central y contenedor de la órbita.
 - `css/style.css`: layout, identidad visual, nombres animados y responsive styling.
 - `css/logo.css`: estilos autocontenidos del componente de logo reutilizable.
+- `css/fiesta.css`: pastel, velitas, globos, contador y capa de confeti.
 - `js/index.js`: nombres, formas geométricas, animaciones y selección de video.
 - `js/logo.js`: inicialización independiente del logo, partículas y lightbox.
+- `js/fiesta.js`: confeti, globos, velitas (toque y micrófono) y canción con Web Audio.
 - `resources/`: videos, logo e imágenes de Emma.
 - `README.md`: instrucciones básicas del repositorio y enlaces a demos.
 - `.ia-context/`: contexto y reglas para asistentes de desarrollo.
@@ -96,6 +99,24 @@ Debe:
 - Evitar listeners duplicados y exponer únicamente la inicialización necesaria.
 - Conservar soporte para clic, teclado, `Escape` y `prefers-reduced-motion`.
 
+### Agent Fiesta / Cumpleaños
+
+Responsable de la experiencia de cumpleaños.
+
+Trabaja en:
+
+- `css/fiesta.css`
+- `js/fiesta.js`
+
+Debe:
+
+- Cambiar nombre, edad, colores y sensibilidad solo desde `FIESTA_CONFIG`, al inicio de `js/fiesta.js`.
+- Mantener las velitas como botones nativos con `aria-pressed` y `aria-label`, y el estado en `role="status"`.
+- Mostrar el micrófono solo en contexto seguro y dejar siempre el toque como alternativa.
+- Iniciar audio únicamente tras un gesto del usuario y sin archivos de audio externos.
+- No crear globos ni confeti con `prefers-reduced-motion`, con la pestaña oculta o con la animación en pausa.
+- Mantener los globos por debajo del panel de control (`z-index`) y limitar cuántos hay en pantalla.
+
 ### Agent Docs / IA Context
 
 Responsable de que esta documentación refleje el código real.
@@ -115,7 +136,8 @@ Debe:
 
 - La landing abre correctamente desde Apache o un servidor HTTP local.
 - El video de fondo, el logo y las imágenes de Emma cargan sin errores 404.
-- Los nombres se generan alrededor de una de las cinco figuras.
+- Los nombres se generan alrededor de una de las seis figuras.
+- Las seis velitas se apagan, cae confeti, suena la canción y se pueden volver a encender.
 - `Emma` aparece resaltada respecto a los demás nombres.
 - El logo abre y cierra el lightbox sin listeners duplicados.
 - La experiencia sigue siendo usable con movimiento reducido y en pantallas pequeñas.

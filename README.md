@@ -16,8 +16,14 @@ Apache, cualquier servidor HTTP local o una CDN de archivos estáticos.
 
 ## Funcionalidades
 
-- Selección dinámica de cinco trayectorias: corazón, estrella, círculo, triángulo y diamante.
-- Tres atmósferas visuales: `Neon pulse`, `Arcade scan` y `Dreamy glow`.
+- **Modo cumpleaños (6 años):** hero de celebración, figura «Número 6» y efecto `Fiesta` por defecto.
+- **Pastel interactivo:** seis velitas que se soplan con un toque o soplando al micrófono
+  (solo en HTTPS). Al apagarlas todas cae confeti y suena «Cumpleaños feliz».
+- **Canción sintetizada** con Web Audio (sin archivos de audio) con botón Cantar/Detener.
+- **Globos** que suben por la pantalla y se revientan con un toque; premio cada 6 globos.
+- **Confeti** en canvas al cargar, al reventar globos, al soplar velitas y al tocar la foto de Emma.
+- Selección dinámica de seis trayectorias: número 6, corazón, estrella, círculo, triángulo y diamante.
+- Cuatro atmósferas visuales: `Fiesta`, `Neon pulse`, `Arcade scan` y `Dreamy glow`.
 - Pausa y reanudación de todas las animaciones desde el panel de control.
 - Selección aleatoria del video de fondo entre `video1.mp4` y `video2.mp4`.
 - Logo reutilizable con partículas, efecto de reacción y lightbox.
@@ -58,14 +64,14 @@ emma-heart/
 ├── index.html              # Estructura semántica y controles de la experiencia
 ├── css/
 │   ├── style.css           # Layout, responsive, efectos y estilos gamer pixel
-│   └── logo.css            # Componente visual reutilizable del logo
+│   ├── logo.css            # Componente visual reutilizable del logo
+│   └── fiesta.css          # Pastel, velitas, globos y capa de confeti
 ├── js/
 │   ├── index.js            # Órbita, figuras, efectos, video y controles
-│   └── logo.js             # Partículas, reacción y lightbox del logo
+│   ├── logo.js             # Partículas, reacción y lightbox del logo
+│   └── fiesta.js           # Confeti, globos, velitas, micrófono y canción
 ├── resources/
-│   ├── emma1.png
-│   ├── emma2.png
-│   ├── emma3.png
+│   ├── emma.webp
 │   ├── logo.png
 │   ├── video1.mp4
 │   └── video2.mp4
@@ -99,6 +105,15 @@ Los efectos se registran en los botones de `index.html` y se aplican mediante
 1. Agrega un botón con `data-effect`.
 2. Añade su etiqueta en `effectLabels` dentro de `js/index.js`.
 3. Define sus reglas visuales en CSS.
+
+### Fiesta de cumpleaños
+
+El nombre, la edad, los colores, el número de globos y la sensibilidad del micrófono se
+configuran al inicio de [js/fiesta.js](./js/fiesta.js) en `FIESTA_CONFIG`. El componente
+usa los elementos `confetti`, `balloon-layer`, `balloon-counter`, `[data-candle]`,
+`cake-status`, `mic-control`, `song-control` y `relight-control`; si alguno falta, esa
+parte simplemente no se activa. El botón del micrófono solo aparece en contexto seguro
+(HTTPS o `localhost`).
 
 ### Logo reutilizable
 
@@ -136,7 +151,9 @@ El componente requiere esta estructura mínima:
 Antes de publicar, comprueba:
 
 - Que `video1.mp4`, `video2.mp4`, las imágenes y el logo responden sin errores 404.
-- Que el panel permite cambiar las cinco figuras y los tres efectos.
+- Que el panel permite cambiar las seis figuras y los cuatro efectos.
+- Que las seis velitas se apagan, cae confeti, suena la canción y aparece «Encender».
+- Que los globos se revientan y nunca tapan el panel de control.
 - Que pausar y reanudar conserva la selección actual.
 - Que el logo funciona con ratón y teclado.
 - Que la interfaz no genera scroll horizontal en móvil.

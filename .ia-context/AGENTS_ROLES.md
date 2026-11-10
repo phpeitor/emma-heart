@@ -59,6 +59,8 @@ Debe:
 - Mantener la estética romántica y la legibilidad de los nombres sobre el video.
 - Mantener el video detrás del contenido y la imagen central por encima de la órbita.
 - Conservar las animaciones de `.love`, `.love_word` y `.love--highlight`.
+- EMMA debe resaltar siempre sobre los demás nombres en todas las figuras y efectos (pastilla, brillo, latido, sin inclinación).
+- Mantener `#centered-image` circular con `aspect-ratio: 1` y `object-fit: cover`; su tamaño sale de `--photo-size`.
 - Usar las formas geométricas definidas en `PATHS` sin duplicar sus trazados en CSS.
 - Respetar `prefers-reduced-motion` cuando se modifiquen animaciones.
 - Mantener el layout usable en pantallas pequeñas.
@@ -75,7 +77,7 @@ Trabaja en:
 
 Debe:
 
-- Mantener la creación de todos los nombres y de `Emma` desde la lista y el runtime.
+- Mantener la creación de todos los nombres y de `EMMA` desde la lista y el runtime; EMMA se intercala `EMMA_REPEAT` veces a intervalos iguales.
 - Mantener la selección aleatoria entre las cinco formas y los dos videos disponibles.
 - Aplicar `offset-path` únicamente cuando el navegador soporte CSS Motion Path.
 - Comprobar que los elementos del DOM existan antes de usarlos si se modifica la estructura.

@@ -43,6 +43,7 @@
     arcade: 'ARCADE SCAN',
     dream: 'DREAMY GLOW'
   };
+  const EMMA_REPEAT = 3;
   let selectedShape = 'six';
   let selectedEffect = 'party';
 
@@ -60,10 +61,18 @@
   function renderOrbit() {
     orbit.replaceChildren();
     const frag = document.createDocumentFragment();
-    names.forEach((name, index) => frag.appendChild(createLove(name, index)));
-    const emma = createLove('Emma', names.length);
-    emma.classList.add('love--highlight');
-    frag.appendChild(emma);
+    // EMMA se repite a intervalos iguales para que siempre se vea en la figura.
+    const step = Math.ceil(names.length / EMMA_REPEAT);
+    const words = [];
+    names.forEach((name, index) => {
+      if (index % step === 0) words.push(null);
+      words.push(name);
+    });
+    words.forEach((word, index) => {
+      const love = createLove(word || 'EMMA', index);
+      if (!word) love.classList.add('love--highlight');
+      frag.appendChild(love);
+    });
     orbit.appendChild(frag);
 
     if (!CSS.supports('offset-path', 'path("M0,0 L1,1")')) return;

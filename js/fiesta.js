@@ -347,6 +347,7 @@
   /* ---------------- Foto de Emma: tarjeta de cumpleaños animada ---------------- */
   const photo = document.getElementById('centered-image');
   const CARD_FLOATERS = ['🎈', '🎉', '✨', '🎂', '🎁', '💖', '🎈', '⭐'];
+  const CARD_VIDEO = './resources/emma.mp4';
 
   function make(tag, className, text) {
     const node = document.createElement(tag);
@@ -355,9 +356,23 @@
     return node;
   }
 
-  // Envuelve la foto ampliada en una tarjeta tipo polaroid que se mueve como un GIF.
+  // Video de Emma dentro de la tarjeta; la foto queda de póster mientras carga.
+  function buildCardVideo(image) {
+    const video = make('video', 'photo-card__img photo-card__img--video');
+    video.src = CARD_VIDEO;
+    video.poster = image.src;
+    video.loop = true;
+    video.playsInline = true;
+    video.preload = 'auto';
+    video.setAttribute('aria-label', `Video de ${FIESTA_CONFIG.name} en su cumpleaños`);
+    // Tocar el video lo pausa o lo reanuda.
+    video.addEventListener('click', () => (video.paused ? video.play() : video.pause()));
+    return video;
+  }
+
+  // Envuelve el video ampliado en una tarjeta tipo polaroid que se mueve como un GIF.
   function buildPhotoCard(image) {
-    image.className = 'photo-card__img';
+    image = buildCardVideo(image);
     const card = make('figure', 'photo-card');
     const inner = make('div', 'photo-card__inner');
     const frame = make('div', 'photo-card__frame');
@@ -419,6 +434,16 @@
       onOpen: overlay => {
         // El confeti pasa por encima del lightbox mientras la tarjeta está abierta.
         document.body.classList.add('photo-card-open');
+        // El video trae su propio audio: se calla la canción y se reproduce con sonido
+        // (el clic que abrió la tarjeta lo permite); si el navegador lo bloquea, va en silencio.
+        stopSong();
+        const video = overlay.querySelector('video');
+        if (video) {
+          video.play().catch(() => {
+            video.muted = true;
+            video.play().catch(() => {});
+          });
+        }
         const card = overlay.querySelector('.photo-card');
         const half = (card ? card.offsetWidth : 420) / 2;
         // Ráfagas desde los costados de la tarjeta para no tapar la cara de Emma.
@@ -428,7 +453,11 @@
           rain(60);
         }, 320);
       },
-      onClose: () => document.body.classList.remove('photo-card-open')
+      onClose: overlay => {
+        document.body.classList.remove('photo-card-open');
+        const video = overlay.querySelector('video');
+        if (video) video.pause();
+      }
     });
   }
 

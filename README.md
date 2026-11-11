@@ -4,145 +4,284 @@
 
 [![Video](https://img.youtube.com/vi/USQhEoqAP6c/0.jpg)](https://www.youtube.com/watch?v=USQhEoqAP6c)  
 
-## Descripción
+> Landing estática e interactiva para el cumpleaños número 6 de Emma.
+> **Zero dependencies · zero build · zero backend:** HTML semántico, CSS moderno y JavaScript vanilla.
 
-**Heart of Emma** es la landing del cumpleaños número 6 de Emma: una experiencia estática e
-interactiva con identidad visual gamer pixel/neón. Combina un video de fondo, la foto de
-Emma en el centro, una órbita de nombres donde **EMMA** siempre resalta y un panel de
-fiesta con pastel, velitas, globos, confeti y canción.
+## Tabla de contenido
 
-El proyecto no utiliza framework, bundler ni backend. Todo el comportamiento se resuelve
-con HTML semántico, CSS moderno y JavaScript vanilla, por lo que puede servirse desde
-Apache, cualquier servidor HTTP local o una CDN de archivos estáticos.
+- [Visión general](#visión-general)
+- [Funcionalidades](#funcionalidades)
+- [Inicio rápido](#inicio-rápido)
+- [Arquitectura](#arquitectura)
+- [Flujos principales](#flujos-principales)
+- [Contratos entre módulos](#contratos-entre-módulos)
+- [Personalización](#personalización)
+- [Accesibilidad y rendimiento](#accesibilidad-y-rendimiento)
+- [Checklist de validación](#checklist-de-validación)
+- [Convenciones de contribución](#convenciones-de-contribución)
+- [Licencia](#licencia)
+
+## Visión general
+
+**Heart of Emma** combina un video de fondo, la foto de Emma en el centro, una órbita de
+nombres donde **EMMA** siempre resalta y un panel de fiesta con pastel, velitas, globos,
+confeti y canción, todo con identidad visual gamer pixel/neón.
+
+Decisiones de diseño:
+
+| Decisión | Motivo |
+|---|---|
+| Sin framework ni bundler | El sitio se publica como archivos estáticos (Apache, CDN o `file://`), sin pipeline que mantener. |
+| Módulos IIFE con `'use strict'` | Aislan el estado de cada componente sin necesidad de ES modules ni servidor con MIME correcto. |
+| Componentes autocontenidos (`logo`, `fiesta`) | Se pueden copiar a otra landing junto con su CSS; si falta un elemento del DOM, esa parte no se activa. |
+| CSS Motion Path para la órbita | La animación corre en el compositor; JS solo crea los nodos y calcula los retrasos. |
+| Web Audio para la canción | Sin archivos de audio que descargar; la melodía se sintetiza nota a nota. |
+| Configuración al inicio de cada módulo | `FIESTA_CONFIG`, `LOGO_CONFIG`, `names` y `PATHS` concentran todo lo personalizable. |
 
 ## Funcionalidades
 
 - **Modo cumpleaños (6 años):** hero de celebración, figura «Número 6» y efecto `Fiesta` por defecto.
-- **EMMA protagonista:** aparece 3 veces en posiciones equidistantes de la figura (0, 1/3 y 2/3 del recorrido), en mayúsculas, dentro de una
-  pastilla rosa con estrellas, brillo y latido, siempre derecha y por encima de los demás
-  nombres (que se atenúan levemente).
-- **Foto circular perfecta:** recorte cuadrado con `object-fit: cover` centrado en la cara
-  (la imagen original es vertical) e insignia «6» en la esquina. Al tocarla (o con `Enter`/`Espacio`)
-  se abre una **tarjeta de cumpleaños animada** tipo polaroid: marco arcoíris que gira, zoom lento
-  sobre la foto, destello, banderines, emojis flotando, título en ola, insignia de edad y confeti.
-  Todo es CSS (sin GIF), toma nombre/edad/colores de `FIESTA_CONFIG` y se queda quieta con
-  movimiento reducido o pausa.
-- **Pastel interactivo como primera acción del panel:** seis velitas que se soplan con un toque
-  o soplando al micrófono (solo en HTTPS). Al apagarlas todas cae confeti y suena «Cumpleaños feliz».
-- **Canción sintetizada** con Web Audio (sin archivos de audio) con botón Cantar/Detener;
-  se detiene al pausar la experiencia.
-- **Globos** que suben por la pantalla y se revientan con un toque; premio cada 6 globos.
-- **Confeti** en canvas al cargar, al reventar globos, al soplar velitas y al tocar la foto de Emma.
-- Selección dinámica de seis trayectorias: número 6, corazón, estrella, círculo, triángulo y diamante.
-- Cuatro atmósferas visuales: `Fiesta`, `Neon pulse` (tubos neón cian/rosa con pulso), `Arcade scan` y `Dreamy glow`.
-- Transición suave al cambiar de figura: la órbita se desvanece y vuelve a entrar (~380 ms).
-- Recuerda la última forma y efecto elegidos (`localStorage`, clave `emma-heart:prefs`).
-- Pausa y reanudación de todas las animaciones, el video de fondo y las partículas del logo.
-- Selección aleatoria del video de fondo entre `video1.mp4` y `video2.mp4`.
-- Logo reutilizable con partículas, efecto de reacción y lightbox.
-- Diseño responsive para escritorio, tablet y móvil.
-- Soporte para `prefers-reduced-motion`.
-- Controles con estados accesibles mediante `aria-pressed` y `aria-live`.
+- **EMMA protagonista:** aparece 3 veces en posiciones equidistantes de la figura (0, 1/3 y 2/3 del
+  recorrido), dentro de una pastilla rosa con estrellas, brillo y latido, siempre por encima de los
+  demás nombres.
+- **Foto circular perfecta:** recorte cuadrado con `object-fit: cover` centrado en la cara e insignia «6».
+- **Tarjeta de cumpleaños con video:** al tocar la foto (o con `Enter`/`Espacio`) se abre un lightbox
+  tipo polaroid que reproduce **`resources/emma.mp4`** en bucle y con sonido (la foto sirve de póster
+  mientras carga). Marco arcoíris giratorio, destello, banderines, emojis flotando, título en ola,
+  insignia de edad y confeti. Tocar el video lo pausa o reanuda; al cerrar se detiene.
+- **Pastel interactivo:** seis velitas que se soplan con un toque o soplando al micrófono (solo en
+  contexto seguro). Al apagarlas cae confeti y suena «Cumpleaños feliz».
+- **Canción sintetizada** con Web Audio, con botón Cantar/Detener; se calla al pausar o al abrir el video.
+- **Globos** que suben y se revientan con un toque; premio cada 6 globos.
+- **Confeti** en canvas al cargar, al reventar globos, al soplar velitas y al abrir la tarjeta.
+- **Seis trayectorias:** número 6, corazón, estrella, círculo, triángulo y diamante, con transición suave (~380 ms).
+- **Cuatro atmósferas:** `Fiesta`, `Neon pulse`, `Arcade scan` y `Dreamy glow`.
+- **Preferencias persistentes** en `localStorage` (clave `emma-heart:prefs`).
+- **Pausa global** de animaciones, video de fondo, globos, canción y partículas del logo.
+- **Video de fondo aleatorio** entre `video1.mp4` y `video2.mp4`.
+- Responsive (escritorio, tablet y móvil) y soporte de `prefers-reduced-motion`.
 
 ## Inicio rápido
 
 ### Requisitos
 
-- Un navegador moderno con soporte para CSS Motion Path.
-- Apache u otro servidor HTTP local recomendado.
-- No se requiere Node.js ni instalación de dependencias.
+- Navegador moderno con soporte para CSS Motion Path (`offset-path`).
+- Un servidor HTTP estático (Apache, `python3 -m http.server`, etc.). No se requiere Node.js.
 
 ### Ejecutar localmente
-
-Clona el repositorio:
 
 ```bash
 git clone https://github.com/phpeitor/emma-heart.git
 cd emma-heart
+python3 -m http.server 8080   # o sirve la carpeta desde Apache
 ```
 
-Después sirve la carpeta desde Apache y abre:
+Abre `http://localhost:8080/` (o `http://localhost/emma-heart/` con Apache).
 
-```text
-http://localhost/emma-heart/
-```
-
-También puedes abrir `index.html` directamente para revisar la interfaz, aunque `http://`
-es la opción recomendada para garantizar la carga correcta de los recursos multimedia.
+> Abrir `index.html` con `file://` funciona para revisar la interfaz, pero el micrófono exige
+> HTTPS o `localhost`, y algunos navegadores restringen la reproducción de video con sonido.
 
 ## Arquitectura
 
+### Estructura de carpetas
+
 ```text
 emma-heart/
-├── index.html              # Estructura semántica y controles de la experiencia
+├── index.html              # Estructura semántica y puntos de integración del DOM
 ├── css/
-│   ├── style.css           # Layout, responsive, efectos y estilos gamer pixel
-│   ├── logo.css            # Componente visual reutilizable del logo
-│   └── fiesta.css          # Pastel, velitas, globos y capa de confeti
+│   ├── style.css           # Layout, responsive, órbita, efectos y estilo pixel
+│   ├── logo.css            # Componente del logo y lightbox genérico
+│   └── fiesta.css          # Pastel, globos, confeti y tarjeta con video
 ├── js/
-│   ├── index.js            # Órbita, figuras, efectos, video y controles
-│   ├── logo.js             # Partículas, reacción y lightbox del logo
-│   └── fiesta.js           # Confeti, globos, velitas, micrófono y canción
+│   ├── index.js            # Órbita, figuras, efectos, preferencias, pausa y video de fondo
+│   ├── logo.js             # Partículas, reacción y lightbox reutilizable (window.HalloweenLogo)
+│   └── fiesta.js           # Confeti, globos, velitas, micrófono, canción y tarjeta (window.EmmaFiesta)
 ├── resources/
-│   ├── emma.webp
+│   ├── emma.webp           # Foto central (también póster del video)
+│   ├── emma.mp4            # Video de la tarjeta de cumpleaños
 │   ├── logo.png
-│   ├── video1.mp4
+│   ├── video1.mp4          # Fondos aleatorios
 │   └── video2.mp4
 └── .ia-context/            # Reglas de contexto para asistentes de desarrollo
 ```
 
-### Responsabilidades principales
+### Mapa de componentes
 
-- `index.html` define los puntos de integración que consume JavaScript: `orbit`,
-  `centered-image`, `background-video`, `shape-controls`, `effect-controls` y
-  `pause-control`.
-- `css/style.css` controla la composición visual, la inversión de columnas en escritorio,
-  el apilado responsive y los modificadores `data-effect`.
-- `js/index.js` crea los nombres de forma segura, aplica la trayectoria seleccionada y
-  actualiza el estado del panel.
-- `css/logo.css` y `js/logo.js` forman un componente independiente que puede reutilizarse
-  en otras landings.
+```mermaid
+flowchart LR
+    subgraph DOM["index.html"]
+        BG["#background-video"]
+        ORB["#orbit"]
+        IMG["#centered-image"]
+        LOGO[".logo"]
+        PANEL["Panel de control<br/>shape / effect / pause"]
+        CAKE["Pastel<br/>[data-candle]"]
+        CANVAS["#confetti"]
+        BAL["#balloon-layer"]
+    end
+
+    subgraph JS["JavaScript (IIFE, orden de carga)"]
+        IDX["1 · index.js"]
+        LG["2 · logo.js<br/>window.HalloweenLogo"]
+        FI["3 · fiesta.js<br/>window.EmmaFiesta"]
+    end
+
+    subgraph RES["resources/"]
+        V12["video1.mp4 / video2.mp4"]
+        EW["emma.webp"]
+        EM["emma.mp4"]
+    end
+
+    IDX --> ORB & PANEL & BG
+    IDX -. elige al azar .-> V12
+    LG --> LOGO
+    FI --> CAKE & CANVAS & BAL & IMG
+    FI -- "HalloweenLogo.lightbox()" --> LG
+    IMG --- EW
+    FI -. tarjeta .-> EM
+    PANEL -- "body.is-paused / data-effect" --> FI
+```
+
+### Capas y responsabilidades
+
+```mermaid
+flowchart TB
+    A["Presentación<br/>index.html + css/*"] --> B["Comportamiento<br/>js/index.js · js/logo.js · js/fiesta.js"]
+    B --> C["Estado global ligero<br/>body[data-effect] · body.is-paused · body.photo-card-open"]
+    B --> D["Persistencia<br/>localStorage emma-heart:prefs"]
+    B --> E["APIs del navegador<br/>Canvas 2D · Web Audio · getUserMedia · HTMLMediaElement"]
+```
+
+El estado compartido entre módulos vive en **atributos y clases de `<body>`**, no en variables
+globales: CSS reacciona a ellos y cada módulo los consulta cuando lo necesita.
+
+## Flujos principales
+
+### Carga inicial
+
+```mermaid
+sequenceDiagram
+    autonumber
+    participant B as Navegador
+    participant I as index.js
+    participant L as logo.js
+    participant F as fiesta.js
+    B->>I: DOMContentLoaded (scripts al final del body)
+    I->>I: loadPrefs() desde localStorage
+    I->>I: renderOrbit() — nombres + 3×EMMA equidistantes
+    I->>B: selectEffect() → body[data-effect]
+    I->>B: video de fondo aleatorio
+    L->>B: initLogo() — partículas y lightbox del logo
+    F->>B: canvas de confeti, globos cada 2.4 s
+    F->>B: rain(140) — confeti de bienvenida
+```
+
+### Tarjeta de cumpleaños con video
+
+```mermaid
+sequenceDiagram
+    autonumber
+    actor U as Usuario
+    participant F as fiesta.js
+    participant L as logo.js (lightbox)
+    participant V as Video emma.mp4
+    U->>F: clic / Enter / Espacio en #centered-image
+    F->>L: lightbox(photo, photo, { content: buildPhotoCard })
+    L->>F: content(img) → tarjeta polaroid con video (póster emma.webp)
+    L->>F: onOpen(overlay)
+    F->>F: stopSong() + body.photo-card-open
+    F->>V: play() con sonido
+    alt el navegador bloquea el audio
+        V-->>F: Promise rechazada
+        F->>V: muted = true · play()
+    end
+    F->>F: ráfagas de confeti a los costados
+    U->>L: ×, Escape o clic fuera
+    L->>F: onClose(overlay)
+    F->>V: pause()
+    L->>U: animación de cierre y foco de vuelta a la foto
+```
+
+### Ciclo del pastel
+
+```mermaid
+stateDiagram-v2
+    [*] --> Encendidas: 6 velitas
+    Encendidas --> Soplando: toque o soplido (mic ≥ blowThreshold)
+    Soplando --> Soplando: quedan velitas
+    Soplando --> Celebrando: última velita apagada
+    Celebrando: rain(220) + playSong() + botón «Encender»
+    Celebrando --> Encendidas: relight() · stopSong()
+```
+
+### Pausa global
+
+```mermaid
+flowchart LR
+    P["Botón Pausar"] --> T{"body.is-paused"}
+    T -- sí --> S1["CSS detiene animaciones"]
+    T -- sí --> S2["video de fondo pause()"]
+    T -- sí --> S3["fiesta.js: stopSong() · no crea globos"]
+    T -- no --> R["play() del fondo y animaciones reanudadas"]
+```
+
+## Contratos entre módulos
+
+| Contrato | Proveedor | Consumidor | Notas |
+|---|---|---|---|
+| `window.HalloweenLogo.lightbox(trigger, image, options)` | `logo.js` | `fiesta.js` | `options`: `modifier`, `closeLabel`, `content(img)`, `onOpen(overlay)`, `onClose(overlay)`. Si no existe, la foto solo lanza confeti. |
+| `window.EmmaFiesta` → `{ burst, rain, playSong, stopSong }` | `fiesta.js` | Consola / otros scripts | Útil para depurar o disparar efectos desde fuera. |
+| `body[data-effect]` | `index.js` | `style.css` | Valores: `party`, `neon`, `arcade`, `dream`. |
+| `body.is-paused` | `index.js` | CSS, `fiesta.js`, `logo.js` | Pausa global. |
+| `body.photo-card-open` | `fiesta.js` | `fiesta.css` | Sube el confeti por encima del lightbox. |
+| IDs del DOM | `index.html` | Todos | `orbit`, `centered-image`, `background-video`, `video-source`, `confetti`, `balloon-layer`, `pause-control`, `cake-status`, `mic-control`, `song-control`, `relight-control`. |
 
 ## Personalización
 
 ### Nombres y figuras
 
-Edita la lista `names` y el objeto `PATHS` en [js/index.js](./js/index.js). Los nombres
-se insertan con `textContent`, por lo que no deben incluir HTML. `EMMA` no va en la lista:
-se intercala automáticamente en posiciones equidistantes; cuántas veces aparece se controla con
-`EMMA_REPEAT` (3 por defecto). El retraso de cada palabra es `--speed × índice ÷ --total`, así que
-el reparto sigue siendo exacto aunque agregues o quites nombres. Su estilo está en `.love--highlight` de
-[css/style.css](./css/style.css).
+Edita `names` y `PATHS` en [js/index.js](./js/index.js). Los nombres se insertan con
+`textContent` (sin HTML). `EMMA` no va en la lista: se intercala automáticamente
+`EMMA_REPEAT` veces (3 por defecto). El retraso de cada palabra es
+`--speed × índice ÷ --total`, así que el reparto es exacto aunque cambies la lista.
+
+### Fiesta y tarjeta
+
+Todo se configura al inicio de [js/fiesta.js](./js/fiesta.js):
+
+```js
+const FIESTA_CONFIG = {
+  name: 'Emma',
+  age: 6,
+  colors: ['#ff3e9d', '#45e8e0', '#ffe66d', '#b9a4ff', '#9dff9a', '#ff9a5c'],
+  maxBalloons: 6,
+  balloonEveryMs: 2400,
+  blowThreshold: 0.2 // volumen (0–1) que cuenta como soplido
+};
+const CARD_VIDEO = './resources/emma.mp4';
+```
+
+Para cambiar el video de la tarjeta, reemplaza `resources/emma.mp4` o apunta `CARD_VIDEO` a
+otro archivo. Recomendado: H.264 + AAC, proporción cercana a 4:5 (el marco es `aspect-ratio: 4 / 5`),
+`faststart` para que empiece antes de terminar la descarga y menos de ~6 MB:
+
+```bash
+ffmpeg -i original.mp4 -vf "scale=848:-2" -c:v libx264 -crf 24 -preset slow \
+       -c:a aac -b:a 128k -movflags +faststart resources/emma.mp4
+```
 
 ### Foto central
 
-La foto se muestra como círculo con `aspect-ratio: 1` y `object-fit: cover`, así que acepta
-imágenes verticales u horizontales sin deformarse. Si cambias la foto, ajusta el encuadre
-con `object-position` en `#centered-image` (por defecto `50% 30%`, para centrar la cara).
-El tamaño se define una sola vez en la variable `--photo-size`, que también usa la
-insignia `.photo-badge`.
+Acepta imágenes verticales u horizontales sin deformarse. Ajusta el encuadre con
+`object-position` en `#centered-image` (por defecto `50% 30%`). El tamaño vive en `--photo-size`.
 
 ### Efectos visuales
 
-Los efectos se registran en los botones de `index.html` y se aplican mediante
-`body[data-effect="..."]` en [css/style.css](./css/style.css). Para añadir uno nuevo:
-
-1. Agrega un botón con `data-effect`.
-2. Añade su etiqueta en `effectLabels` dentro de `js/index.js`.
-3. Define sus reglas visuales en CSS.
-
-### Fiesta de cumpleaños
-
-El nombre, la edad, los colores, el número de globos y la sensibilidad del micrófono se
-configuran al inicio de [js/fiesta.js](./js/fiesta.js) en `FIESTA_CONFIG`. El componente
-usa los elementos `confetti`, `balloon-layer`, `balloon-counter`, `[data-candle]`,
-`cake-status`, `mic-control`, `song-control` y `relight-control`; si alguno falta, esa
-parte simplemente no se activa. El botón del micrófono solo aparece en contexto seguro
-(HTTPS o `localhost`).
+1. Agrega un botón con `data-effect` en `index.html`.
+2. Registra su etiqueta en `effectLabels` (`js/index.js`).
+3. Define sus reglas bajo `body[data-effect="..."]` en `css/style.css`.
 
 ### Logo reutilizable
-
-Los emojis y la reacción del logo se configuran al inicio de [js/logo.js](./js/logo.js):
 
 ```js
 const LOGO_CONFIG = {
@@ -152,50 +291,54 @@ const LOGO_CONFIG = {
 };
 ```
 
-El componente requiere esta estructura mínima:
-
 ```html
 <div class="logo" role="button" tabindex="0" aria-label="Abrir logo">
-  <div class="box">
-    <img src="./resources/logo.png" alt="Logo">
-  </div>
+  <div class="box"><img src="./resources/logo.png" alt="Logo"></div>
 </div>
 ```
 
-## Accesibilidad y UX
+## Accesibilidad y rendimiento
 
-- Los controles son botones nativos y exponen su estado con `aria-pressed`.
-- El resumen de selección utiliza `role="status"` y `aria-live="polite"`.
-- El logo y la foto de Emma pueden abrirse con clic, `Enter` o `Espacio`.
-- El lightbox es un diálogo modal: el foco pasa al botón cerrar y vuelve al logo al cerrarse.
-- El lightbox se cierra con botón, `Escape` o clic fuera.
-- Los textos del panel en móvil no bajan de 8 px en tipografía pixel.
-- Las animaciones respetan `prefers-reduced-motion`.
-- Las imágenes incluyen texto alternativo descriptivo.
+**Accesibilidad**
 
-## Validación manual
+- Controles nativos con `aria-pressed`; resumen con `role="status"` y `aria-live="polite"`.
+- Foto y logo operables con clic, `Enter` o `Espacio`.
+- Lightbox modal (`role="dialog"`, `aria-modal`): foco en «cerrar», `Tab` atrapado, cierre con
+  `Escape`, botón o clic fuera, y el foco vuelve a quien lo abrió.
+- El video de la tarjeta tiene `aria-label` descriptivo.
+- `prefers-reduced-motion` desactiva animaciones decorativas y los globos.
 
-Antes de publicar, comprueba:
+**Rendimiento**
 
-- Que `video1.mp4`, `video2.mp4`, las imágenes y el logo responden sin errores 404.
-- Que el panel permite cambiar las seis figuras (con transición suave) y los cuatro efectos.
-- Que «Neon pulse» cambia visiblemente el aspecto y que la elección se conserva al recargar.
-- Que pausar detiene también el video de fondo y las partículas del logo.
-- Que la foto de Emma se ve como círculo perfecto, sin deformarse, en escritorio y móvil.
-- Que EMMA aparece 3 veces y resalta sobre los demás nombres en las seis figuras y los cuatro efectos.
-- Que las seis velitas se apagan, cae confeti, suena la canción y aparece «Encender».
-- Que pausar también detiene la canción.
-- Que los globos se revientan y nunca tapan el panel de control.
-- Que pausar y reanudar conserva la selección actual.
-- Que el logo funciona con ratón y teclado.
-- Que la interfaz no genera scroll horizontal en móvil.
-- Que la experiencia sigue siendo legible con movimiento reducido.
+- La órbita usa `offset-path` + `transform`, animados en el compositor.
+- El confeti se dibuja en un solo `<canvas>` con `requestAnimationFrame` y se detiene sin partículas.
+- Los globos no se generan con la pestaña oculta ni en pausa.
+- El video de la tarjeta se crea solo al abrirla y se pausa al cerrarla.
 
-## Licencia y contribución
+## Checklist de validación
 
-Este repositorio no declara todavía una licencia de distribución. Antes de reutilizarlo
-fuera de un entorno personal, define la licencia correspondiente y verifica los derechos
-de las imágenes, videos, tipografías y recursos externos.
+- [ ] `video1.mp4`, `video2.mp4`, `emma.mp4`, `emma.webp` y `logo.png` responden sin 404.
+- [ ] Las seis figuras cambian con transición suave y los cuatro efectos se aplican.
+- [ ] La figura y el efecto elegidos se conservan al recargar.
+- [ ] EMMA aparece 3 veces y resalta en todas las figuras y efectos.
+- [ ] La foto se ve como círculo perfecto en escritorio y móvil.
+- [ ] Al tocar la foto, la tarjeta reproduce `emma.mp4` con sonido, la canción se calla y al cerrar el video se detiene.
+- [ ] Las seis velitas se apagan, cae confeti, suena la canción y aparece «Encender».
+- [ ] Pausar detiene animaciones, video de fondo, canción y globos; reanudar conserva la selección.
+- [ ] Los globos se revientan y nunca tapan el panel.
+- [ ] Logo y foto funcionan con ratón y teclado.
+- [ ] Sin scroll horizontal en móvil y legible con movimiento reducido.
 
-Los cambios deben mantenerse enfocados, conservar las rutas relativas y actualizar esta
-documentación cuando se modifique la estructura o el comportamiento público de la landing.
+## Convenciones de contribución
+
+- Ramas `feature/<tema>` hacia `main` mediante PR.
+- Commits en español con [Conventional Commits](https://www.conventionalcommits.org/es/) (`feat:`, `fix:`, `docs:`, `chore:`).
+- Mantener rutas relativas y la lógica de cumpleaños en `fiesta.js`/`fiesta.css` (no mezclarla en `index.js`).
+- Los originales pesados van en `resources/originales/` (ignorado por git); solo se publican versiones optimizadas.
+- Actualizar este README cuando cambie la estructura o el comportamiento público.
+
+## Licencia
+
+Este repositorio no declara todavía una licencia de distribución. Antes de reutilizarlo fuera
+de un entorno personal, define la licencia y verifica los derechos de imágenes, videos,
+tipografías y recursos externos.

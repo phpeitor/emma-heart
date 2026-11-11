@@ -288,6 +288,13 @@ body.photo-card-open #confetti { z-index: 1300; }
   animation: card-kenburns 9s ease-in-out infinite alternate;
 }
 
+/* El video ya tiene movimiento propio: sin zoom lento encima. */
+.photo-card__img--video {
+  object-position: 50% 50%;
+  animation: none;
+  cursor: pointer;
+}
+
 /* Destello que cruza la foto cada pocos segundos. */
 .photo-card__shine {
   position: absolute;

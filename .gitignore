@@ -35,3 +35,6 @@ screenshots/
 
 # Originales pesados o privados que no se publican (fotos/videos sin optimizar)
 resources/originales/
+
+# Video de la tarjeta de la foto (se copia aparte al servidor, no va al repo)
+resources/emma.mp4
